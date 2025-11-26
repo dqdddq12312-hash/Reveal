@@ -1,0 +1,7 @@
+dataclasses
+typing
+requests
+pymupdf
+transformers
+pillow
+torch
