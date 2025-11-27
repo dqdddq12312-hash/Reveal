@@ -5,3 +5,11 @@ pymupdf
 transformers
 pillow
 torch
+faiss-cpu
+numpy
+sentence-transformers
+tiktoken
+protobuf
+timm
+huggingface_hub[hf_xet]
+openai
