@@ -1,6 +1,7 @@
 from pathlib import Path
 import argparse
 import json
+import re
 from typing import Dict, List, Tuple, Any, Optional
 
 import fitz  # PyMuPDF
@@ -215,6 +216,58 @@ class ESGReportPreprocessor:
                 extracted_rows.append(normalised_row)
 
         return extracted_rows or None
+
+    @staticmethod
+    def _is_year_header(cell: Any) -> bool:
+        if not isinstance(cell, str):
+            return False
+        token = cell.strip()
+        return bool(re.fullmatch(r"(19|20)\d{2}", token))
+
+    @staticmethod
+    def _extract_numeric_tokens(cell: Any) -> List[str]:
+        if not isinstance(cell, str):
+            return []
+        tokens = re.findall(r"[+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?", cell)
+        return [tok.strip() for tok in tokens if tok.strip()]
+
+    def _expand_year_columns(self, table: List[List[str]]) -> List[List[str]]:
+        header_idx = None
+        year_cols: List[int] = []
+
+        for idx, row in enumerate(table):
+            current_year_cols = [col for col, cell in enumerate(row) if self._is_year_header(cell)]
+            if len(current_year_cols) >= 3:  # need at least 3 years to treat as timeline
+                header_idx = idx
+                year_cols = current_year_cols
+                break
+
+        if header_idx is None or not year_cols:
+            return table
+
+        first_year_col = year_cols[0]
+        num_years = len(year_cols)
+        max_cols = max(len(row) for row in table)
+
+        for row in table:
+            if len(row) < max_cols:
+                row.extend([""] * (max_cols - len(row)))
+
+        for row_idx, row in enumerate(table):
+            if row_idx <= header_idx:
+                continue
+
+            trailing_cells = row[first_year_col:]
+            tokens: List[str] = []
+            for cell in trailing_cells:
+                tokens.extend(self._extract_numeric_tokens(cell))
+
+            if len(tokens) >= num_years:
+                for offset, col_idx in enumerate(year_cols):
+                    if offset < len(tokens):
+                        row[col_idx] = tokens[offset]
+
+        return table
 
     def parse_pdf(
         self, pdf_path: str
@@ -459,7 +512,9 @@ class ESGReportPreprocessor:
                         clip_rect = fitz.Rect(rx0, ry0, rx1, ry1)
                         fitz_rows = self._extract_table_with_fitz(page, clip_rect)
                         if fitz_rows:
-                            assembled_tables.append(fitz_rows)
+                            assembled_tables.append(
+                                self._expand_year_columns(fitz_rows)
+                            )
                             continue
 
                         raw_text = page.get_text("text", clip=clip_rect)
@@ -469,7 +524,9 @@ class ESGReportPreprocessor:
                             if ln.strip()
                         ]
                         if rows:
-                            assembled_tables.append(rows)
+                            assembled_tables.append(
+                                self._expand_year_columns(rows)
+                            )
                         continue
 
                     # Build empty cell grid
@@ -541,7 +598,9 @@ class ESGReportPreprocessor:
                             fitz_numeric = _count_numeric_cells(fitz_rows)
                             fitz_filled = _count_non_empty_cells(fitz_rows)
                             if fitz_numeric > numeric_cells or fitz_filled > filled_cells:
-                                assembled_tables.append(fitz_rows)
+                                assembled_tables.append(
+                                    self._expand_year_columns(fitz_rows)
+                                )
                                 prefer_fitz = True
 
                     if prefer_fitz:
@@ -555,10 +614,14 @@ class ESGReportPreprocessor:
                             if ln.strip()
                         ]
                         if rows:
-                            assembled_tables.append(rows)
+                            assembled_tables.append(
+                                self._expand_year_columns(rows)
+                            )
                         continue
 
-                    assembled_tables.append(table_cells)
+                    assembled_tables.append(
+                        self._expand_year_columns(table_cells)
+                    )
 
         doc.close()
         return text_blocks, outline, assembled_tables
