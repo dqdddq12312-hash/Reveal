@@ -572,9 +572,15 @@ class ESGRevealAgent:
 
         evidence: List[Dict[str, Any]] = []
 
-        text_summaries = self._safe_get(kb, "text", "summaries", default=[]) or []
-        text_originals = self._safe_get(kb, "text", "original_texts", default=[]) or []
-        text_embs = self._safe_get(kb, "text", "embeddings", default=[]) or []
+        text_summaries = self._safe_get(kb, "text", "summaries", default=[])
+        if text_summaries is None:
+            text_summaries = []
+        text_originals = self._safe_get(kb, "text", "original_texts", default=[])
+        if text_originals is None:
+            text_originals = []
+        text_embs = self._safe_get(kb, "text", "embeddings", default=[])
+        if text_embs is None:
+            text_embs = []
         scores, ids = self._retrieve_from_index(
             query_vec, self.text_index, text_embs, top_k_per_source
         )
@@ -593,9 +599,15 @@ class ESGRevealAgent:
                 }
             )
 
-        outline_headers = self._safe_get(kb, "outline", "headers", default=[]) or []
-        outline_levels = self._safe_get(kb, "outline", "levels", default=[]) or []
-        outline_embs = self._safe_get(kb, "outline", "embeddings", default=[]) or []
+        outline_headers = self._safe_get(kb, "outline", "headers", default=[])
+        if outline_headers is None:
+            outline_headers = []
+        outline_levels = self._safe_get(kb, "outline", "levels", default=[])
+        if outline_levels is None:
+            outline_levels = []
+        outline_embs = self._safe_get(kb, "outline", "embeddings", default=[])
+        if outline_embs is None:
+            outline_embs = []
         scores, ids = self._retrieve_from_index(
             query_vec, self.outline_index, outline_embs, top_k_per_source
         )
@@ -614,10 +626,18 @@ class ESGRevealAgent:
                 }
             )
 
-        table_phrases = self._safe_get(kb, "tables", "phrases", default=[]) or []
-        table_ids = self._safe_get(kb, "tables", "table_ids", default=[]) or []
-        tables = self._safe_get(kb, "tables", "tables", default=[]) or []
-        table_embs = self._safe_get(kb, "tables", "embeddings", default=[]) or []
+        table_phrases = self._safe_get(kb, "tables", "phrases", default=[])
+        if table_phrases is None:
+            table_phrases = []
+        table_ids = self._safe_get(kb, "tables", "table_ids", default=[])
+        if table_ids is None:
+            table_ids = []
+        tables = self._safe_get(kb, "tables", "tables", default=[])
+        if tables is None:
+            tables = []
+        table_embs = self._safe_get(kb, "tables", "embeddings", default=[])
+        if table_embs is None:
+            table_embs = []
         scores, ids = self._retrieve_from_index(
             query_vec, self.table_index, table_embs, top_k_per_source
         )
