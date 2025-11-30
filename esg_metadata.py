@@ -55,6 +55,23 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         # ----- A1: Emissions -----
         ESGMetadataRecord(
             aspect="A1. Emissions",
+            kpi="Policies, governance and compliance related to air emissions, discharges into water and land, and hazardous waste handling.",
+            topic=[
+                "Environmental policy", "Air and GHG compliance", "Wastewater governance", "Hazardous waste policy",
+            ],
+            quantity="Key Actions",
+            search_terms=[
+                "environmental policy", "emissions policy", "wastewater compliance", "hazardous waste policy",
+                "pollution control governance", "environmental management system",
+            ],
+            knowledge=(
+                "HKEx requires issuers to describe overarching policies, management systems and compliance records for air emissions, "
+                "effluent discharges and hazardous waste. Summaries should cover governance roles, applicable regulations and any "
+                "cases of non-compliance or corrective actions."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A1. Emissions",
             kpi="Types of key air emissions (e.g. NOx, SOx, particulates) and the related emission data.",
             topic=["Air emissions", "Nitrogen oxides (NOx)", "Sulfur oxides (SOx)", "Particulate matter (PM)"],
             quantity="Absolute Values",
@@ -82,6 +99,36 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
                 "sources. Scope 2 covers indirect emissions from purchased electricity, steam, "
                 "heating or cooling. Disclosure usually includes tonnes of CO2‑equivalent and "
                 "intensity per activity unit."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A1. Emissions",
+            kpi="Scope 1 greenhouse gas emissions by major source (fuel combustion, process emissions) and related intensity.",
+            topic=["Scope 1 breakdown", "Stationary combustion", "Mobile combustion", "GHG intensity"],
+            quantity="Absolute Values",
+            search_terms=[
+                "scope 1 emissions", "direct emissions", "stationary combustion", "mobile combustion",
+                "process emissions", "scope 1 intensity",
+            ],
+            knowledge=(
+                "HKEx indicators expect issuers to quantify direct (Scope 1) emissions by key "
+                "sources to show which operations drive the footprint. Typical disclosures split "
+                "fuel combustion, process gases and vehicles together with an intensity ratio."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A1. Emissions",
+            kpi="Scope 2 greenhouse gas emissions, separated into location-based and market-based values where available, plus intensity.",
+            topic=["Scope 2 location-based", "Scope 2 market-based", "Purchased electricity", "GHG intensity"],
+            quantity="Absolute Values",
+            search_terms=[
+                "scope 2 emissions", "purchased electricity", "location-based", "market-based",
+                "indirect emissions", "scope 2 intensity",
+            ],
+            knowledge=(
+                "Energy-indirect emissions (Scope 2) should be broken into location-based and "
+                "market-based values when renewable instruments are used. Intensities such as "
+                "tonnes CO2e per MWh or per unit of revenue help show efficiency improvements."
             ),
         ),
         ESGMetadataRecord(
@@ -115,6 +162,21 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
         ESGMetadataRecord(
             aspect="A1. Emissions",
+            kpi="Total wastewater and effluent discharged and, where available, pollutant concentrations or intensity per facility.",
+            topic=["Wastewater discharge", "Effluent pollutants", "Water quality compliance"],
+            quantity="Absolute Values",
+            search_terms=[
+                "wastewater discharge", "effluent volume", "treated effluent", "COD", "BOD",
+                "wastewater intensity", "sewage", "discharge to water",
+            ],
+            knowledge=(
+                "HKEx highlights discharges into water and land within Aspect A1. Companies "
+                "typically report wastewater volumes, pollutant loads such as COD/BOD, and any "
+                "intensity indicators or compliance data tied to discharge permits."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A1. Emissions",
             kpi="Emission‑reduction objectives set by the company and progress or actions taken to meet those objectives.",
             topic=["Emission reduction targets", "Greenhouse‑gas targets", "Air‑pollutant targets"],
             quantity="Key Actions",
@@ -142,8 +204,38 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
                 "of different waste streams, as well as initiatives and targets to reduce waste."
             ),
         ),
+        ESGMetadataRecord(
+            aspect="A1. Emissions",
+            kpi="Processes for wastewater treatment, spill prevention and soil contamination control, including monitoring and response actions.",
+            topic=["Wastewater treatment", "Spill prevention", "Soil protection", "Monitoring"],
+            quantity="Key Actions",
+            search_terms=[
+                "wastewater treatment", "effluent control", "spill response", "bunding", "secondary containment",
+                "soil remediation", "pollution incident", "environmental monitoring",
+            ],
+            knowledge=(
+                "Aspect A1 requires issuers to explain how they prevent and respond to discharges "
+                "to water and land. Useful details include treatment technologies, secondary "
+                "containment, spill drills, incident statistics and remediation steps."
+            ),
+        ),
 
         # ----- A2: Use of Resources -----
+        ESGMetadataRecord(
+            aspect="A2. Use of Resources",
+            kpi="Policies and governance for efficient use of energy, water, raw materials and packaging, including compliance with relevant regulations.",
+            topic=["Resource efficiency policy", "Energy governance", "Water stewardship", "Materials management"],
+            quantity="Key Actions",
+            search_terms=[
+                "resource efficiency policy", "energy management policy", "water policy",
+                "materials management", "ISO 50001", "ISO 14001",
+            ],
+            knowledge=(
+                "Under Aspect A2, HKEx expects issuers to outline policies, responsibilities and "
+                "compliance processes for conserving energy, water and materials. Mention targets, "
+                "management systems and any regulatory obligations."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="A2. Use of Resources",
             kpi="Total direct and indirect energy consumption by type and energy intensity.",
@@ -156,6 +248,36 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
             knowledge=(
                 "Reports total energy use split by energy sources together with an intensity metric, "
                 "for example kilowatt‑hours per unit of production or per floor area."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A2. Use of Resources",
+            kpi="Renewable energy consumption (self-generated and procured) and its share of total energy use.",
+            topic=["Renewable electricity", "Self-generated energy", "Green purchase", "Energy mix"],
+            quantity="Absolute Values",
+            search_terms=[
+                "renewable energy", "green electricity", "RECs", "solar generation",
+                "renewable consumption", "percentage renewable",
+            ],
+            knowledge=(
+                "To evidence decarbonisation roadmaps, issuers often disclose megawatt-hours of "
+                "renewable energy consumed (onsite or procured) together with the proportion of total "
+                "energy use covered."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A2. Use of Resources",
+            kpi="Renewable energy sourcing strategy, including procurement instruments, onsite projects and future targets.",
+            topic=["Renewable strategy", "Power purchase", "Onsite solar", "Renewable targets"],
+            quantity="Key Actions",
+            search_terms=[
+                "renewable energy strategy", "PPA", "onsite solar", "renewable roadmap",
+                "green electricity plan", "science based target",
+            ],
+            knowledge=(
+                "HKEx encourages issuers to explain how they increase the share of renewable "
+                "energy, for example via PPAs, rooftop solar, renewable certificates or supplier "
+                "engagement, together with milestones and investments."
             ),
         ),
         ESGMetadataRecord(
@@ -202,6 +324,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
         ESGMetadataRecord(
             aspect="A2. Use of Resources",
+            kpi="Consumption of key raw or packaging materials (e.g. metals, plastics, paper) and intensity per unit of output.",
+            topic=["Raw material use", "Material intensity", "Plastics", "Metals"],
+            quantity="Absolute Values",
+            search_terms=[
+                "raw material consumption", "plastic use", "steel consumption", "materials per unit",
+                "material intensity", "GRI 301",
+            ],
+            knowledge=(
+                "Aspect A2 links to GRI 301 on materials. Disclose tonnage of major inputs such as "
+                "metals, plastics, paper or bio-based feedstock plus a normalised intensity metric."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="A2. Use of Resources",
             kpi="Total packaging materials used for finished products and, where relevant, packaging intensity.",
             topic=["Packaging material use", "Packaging intensity"],
             quantity="Absolute Values",
@@ -214,8 +350,38 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
                 "for finished goods, often with a metric per unit of product."
             ),
         ),
+        ESGMetadataRecord(
+            aspect="A2. Use of Resources",
+            kpi="Initiatives to reduce packaging impact, increase recycled content or eliminate single-use materials, and results achieved.",
+            topic=["Circular packaging", "Recycled content", "Packaging reduction", "Eco-design"],
+            quantity="Key Actions",
+            search_terms=[
+                "recycled content", "plastic reduction", "packaging redesign", "circular packaging",
+                "eliminate single-use", "packaging roadmap",
+            ],
+            knowledge=(
+                "HKEx references product lifecycle considerations under A2. Describe packaging "
+                "redesigns, recycled input targets, refill models or supplier requirements together "
+                "with quantitative results where possible."
+            ),
+        ),
 
         # ----- A3: Environment and Natural Resources -----
+        ESGMetadataRecord(
+            aspect="A3. Environment and Natural Resources",
+            kpi="Policies and governance processes for minimising significant impacts on the environment and natural resources.",
+            topic=["Impact management", "Environmental governance", "Resource conservation policy"],
+            quantity="Key Actions",
+            search_terms=[
+                "natural resource policy", "biodiversity policy", "environmental impact management",
+                "restoration standard", "no net loss",
+            ],
+            knowledge=(
+                "Aspect A3 general disclosure expects companies to describe how they identify "
+                "significant impacts on ecosystems or natural resources, assign responsibilities and "
+                "embed mitigation into operations and capital projects."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="A3. Environment and Natural Resources",
             kpi="Significant impacts of the company’s activities on the environment and natural resources, and actions taken to manage them.",
@@ -230,8 +396,38 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
                 "management actions or restoration efforts are in place."
             ),
         ),
+        ESGMetadataRecord(
+            aspect="A3. Environment and Natural Resources",
+            kpi="Biodiversity conservation or habitat restoration programmes, offsets and partnerships, including progress metrics.",
+            topic=["Biodiversity", "Habitat restoration", "Offsets", "Partnerships"],
+            quantity="Key Actions",
+            search_terms=[
+                "biodiversity program", "habitat restoration", "ecological offset", "conservation partnership",
+                "tree planting", "nature positive",
+            ],
+            knowledge=(
+                "Companies with land-intensive operations should disclose dedicated initiatives to "
+                "protect or restore habitats, such as reforestation, offset programmes or work with "
+                "NGOs, and report qualitative or quantitative progress."
+            ),
+        ),
 
         # ----- A4: Climate Change -----
+        ESGMetadataRecord(
+            aspect="A4. Climate Change",
+            kpi="Policies, governance arrangements and compliance processes for identifying and managing climate-related risks and opportunities.",
+            topic=["Climate governance", "Risk oversight", "Compliance", "Scenario governance"],
+            quantity="Key Actions",
+            search_terms=[
+                "climate governance", "board oversight climate", "TCFD governance", "climate policy",
+                "climate risk management", "scenario analysis",
+            ],
+            knowledge=(
+                "HKEx aligns Aspect A4 with TCFD concepts. Issuers should outline governance "
+                "structures, management responsibilities, compliance processes and how climate "
+                "risks are integrated into enterprise risk management."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="A4. Climate Change",
             kpi="Major climate‑related issues that affect or could affect the company, and actions taken to manage them.",
@@ -255,6 +451,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         # ----- B1: Employment -----
         ESGMetadataRecord(
             aspect="B1. Employment",
+            kpi="Policies, governance arrangements and compliance with laws on compensation, recruitment, working hours and equal opportunity.",
+            topic=["Employment policy", "Compensation governance", "Working hours", "Equal opportunity"],
+            quantity="Key Actions",
+            search_terms=[
+                "employment policy", "compensation policy", "working hours", "rest day",
+                "equal opportunity policy", "non-discrimination", "employment compliance",
+            ],
+            knowledge=(
+                "Aspect B1 requires issuers to explain employment-related policies, board oversight "
+                "and compliance with Hong Kong labour ordinances, including diversity and benefits."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B1. Employment",
             kpi="Total workforce, broken down by gender, employment type, age group and geographic region.",
             topic=["Workforce size", "Gender distribution", "Employment type", "Age group", "Region"],
             quantity="Absolute Values",
@@ -265,6 +475,46 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
             knowledge=(
                 "Requires a structured breakdown of the workforce, typically in tables, showing how "
                 "employees are distributed by gender, contract type, age band and location."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B1. Employment",
+            kpi="Workforce by employment type (full-time, part-time, contract) with totals and percentages.",
+            topic=["Full-time", "Part-time", "Contract", "Headcount"],
+            quantity="Absolute Values",
+            search_terms=[
+                "full-time employees", "part-time employees", "contract staff", "headcount by employment type",
+                "permanent employees", "temporary employees",
+            ],
+            knowledge=(
+                "HKEx KPI B1.1 explicitly calls for employment type splits. Extract headcount and, "
+                "if provided, the percentage of the workforce in each contract type."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B1. Employment",
+            kpi="Employee headcount by age group (e.g. under 30, 30–50, over 50) and corresponding percentages.",
+            topic=["Age under 30", "Age 30-50", "Age over 50", "Age distribution"],
+            quantity="Absolute Values",
+            search_terms=[
+                "age group", "under 30", "30-50", "over 50", "age distribution", "demographics",
+            ],
+            knowledge=(
+                "Provide the number of employees in each disclosed age band together with any "
+                "percentage metrics required by KPI B1.1."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B1. Employment",
+            kpi="Employee headcount by geographic region (e.g. Hong Kong, Mainland China, Overseas) and related percentages.",
+            topic=["Region", "Hong Kong", "Mainland China", "Overseas"],
+            quantity="Absolute Values",
+            search_terms=[
+                "employees in Hong Kong", "employees in mainland", "regional headcount", "geographic distribution",
+            ],
+            knowledge=(
+                "Capture the workforce split by key geographies highlighted in ESG reports to satisfy "
+                "the regional breakdown element of KPI B1.1."
             ),
         ),
         ESGMetadataRecord(
@@ -283,6 +533,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
 
         # ----- B2: Health and Safety -----
+        ESGMetadataRecord(
+            aspect="B2. Health and Safety",
+            kpi="Policies and compliance processes for occupational health and safety, including governance and monitoring systems.",
+            topic=["Safety policy", "Compliance", "Governance", "Monitoring"],
+            quantity="Key Actions",
+            search_terms=[
+                "health and safety policy", "OHS governance", "safety compliance",
+                "safety committee", "occupational health programme",
+            ],
+            knowledge=(
+                "Aspect B2 calls for disclosures on OHS policies, responsibilities, compliance with "
+                "laws and how effectiveness is monitored across operations and contractors."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="B2. Health and Safety",
             kpi="Number and rate of work‑related fatalities in each of the past three years, including the reporting year.",
@@ -313,6 +577,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
         ESGMetadataRecord(
             aspect="B2. Health and Safety",
+            kpi="Number of recordable work-related injuries and associated injury rates (e.g. LTIR, TRIR).",
+            topic=["Recordable injuries", "Injury rate", "LTIR", "TRIR"],
+            quantity="Absolute Values",
+            search_terms=[
+                "recordable injuries", "injury rate", "LTIR", "TRIR", "lost-time injury rate",
+                "OSHA rate", "work injury cases",
+            ],
+            knowledge=(
+                "Although KPI B2.1 emphasises fatalities, issuers typically also disclose non-fatal "
+                "injury counts and rates to demonstrate safety performance trends."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B2. Health and Safety",
             kpi="Occupational health and safety measures adopted and how these measures are implemented and monitored.",
             topic=["Health and safety policies", "Safety programmes", "Monitoring mechanisms"],
             quantity="Key Actions",
@@ -327,6 +605,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
 
         # ----- B3: Development and Training -----
+        ESGMetadataRecord(
+            aspect="B3. Development and Training",
+            kpi="Policies for improving employee skills, training governance and how programmes are evaluated.",
+            topic=["Training policy", "Skills development", "Programme governance"],
+            quantity="Key Actions",
+            search_terms=[
+                "training policy", "learning governance", "talent development strategy",
+                "succession planning", "skills roadmap",
+            ],
+            knowledge=(
+                "The B3 general disclosure asks issuers to describe training objectives, coverage, "
+                "budgeting and evaluation methods, highlighting links to career development."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="B3. Development and Training",
             kpi="Percentage of employees who received training, by gender and employee category.",
@@ -357,6 +649,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
         ),
 
         # ----- B4: Labour Standards -----
+        ESGMetadataRecord(
+            aspect="B4. Labour Standards",
+            kpi="Policies and compliance controls to prevent child labour and forced labour across operations and the supply chain.",
+            topic=["Child labour policy", "Forced labour policy", "Compliance"],
+            quantity="Key Actions",
+            search_terms=[
+                "child labour policy", "forced labour policy", "human rights governance",
+                "modern slavery", "supplier human rights",
+            ],
+            knowledge=(
+                "HKEx expects issuers to outline governance over child and forced labour risks, "
+                "including due diligence scope, contractual requirements and remediation pathways."
+            ),
+        ),
         ESGMetadataRecord(
             aspect="B4. Labour Standards",
             kpi="Measures to review employment practices to prevent child labour and forced labour.",
@@ -399,6 +705,19 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
             knowledge=(
                 "Provides a quantitative overview of the supply base and how it is distributed across "
                 "different regions."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B5. Supply Chain Management",
+            kpi="Number of suppliers assessed or audited for environmental and social risks during the year, and coverage percentage.",
+            topic=["Supplier assessments", "Audited suppliers", "Coverage"],
+            quantity="Absolute Values",
+            search_terms=[
+                "suppliers assessed", "supplier audits", "ESG assessment coverage", "supplier screening",
+            ],
+            knowledge=(
+                "KPI B5.2 requests issuers to indicate how many suppliers are subject to ESG "
+                "engagement or assessments. Capture counts and any coverage percentages reported."
             ),
         ),
         ESGMetadataRecord(
@@ -471,6 +790,20 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
             knowledge=(
                 "Requires disclosure of complaint volumes and a description of mechanisms for handling "
                 "and resolving them."
+            ),
+        ),
+        ESGMetadataRecord(
+            aspect="B6. Product Responsibility",
+            kpi="Number of substantiated customer data privacy or cybersecurity incidents and individuals affected.",
+            topic=["Data breaches", "Privacy incidents", "Individuals affected"],
+            quantity="Absolute Values",
+            search_terms=[
+                "data breach", "privacy incident", "cybersecurity incident", "customers affected",
+                "PDPO", "personal data leak",
+            ],
+            knowledge=(
+                "GRI 418 and HKEx Aspect B6 expect issuers to quantify confirmed data privacy "
+                "incidents, including the number of cases and individuals impacted."
             ),
         ),
         ESGMetadataRecord(
@@ -549,7 +882,7 @@ ESG_METADATA: Dict[str, List[ESGMetadataRecord]] = {
             aspect="B7. Anti-corruption",
             kpi="Anti‑corruption training provided to directors and staff.",
             topic=["Anti‑corruption training", "Training coverage"],
-            quantity="Key Actions",
+            quantity="Absolute Values",
             search_terms=[
                 "anti-corruption training", "ethics training", "compliance training",
                 "training hours", "training attendance",
@@ -839,6 +1172,47 @@ class ESGMetadataModule:
         destination = Path(path)
         destination.write_text(self.to_json(group_by=group_by), encoding="utf-8")
         return destination
+
+    def build_prompt_from_metadata(
+        self, record: ESGMetadataRecord, reference_text: str
+    ) -> str:
+        """
+        Build an ESGReveal-style prompt for LLM extraction given:
+          - An ESG metadata record (Aspect, KPI, Topic, Quantity, etc.)
+          - Retrieved reference text from the knowledge base
+        
+        Returns a formatted prompt string for the LLM.
+        """
+        topics_str = ", ".join(record.topic)
+        
+        prompt = f"""You are an ESG data extraction agent. Your task is to extract information from the reference content below.
+
+**ESG Indicator:**
+- Aspect: {record.aspect}
+- KPI: {record.kpi}
+- Topics: {topics_str}
+- Quantity Type: {record.quantity}
+
+**Background Knowledge:**
+{record.knowledge}
+
+**Reference Content:**
+{reference_text}
+
+**Instructions:**
+Based strictly on the reference content above, extract the relevant ESG information for this indicator.
+Respond in JSON format with the following fields:
+- "Disclosure": Whether the indicator is disclosed (Yes/No/Partial)
+- "KPI": The KPI being measured
+- "Topic": The specific topic addressed
+- "Value": Numerical or textual value found (or "Not Available")
+- "Unit": Unit of measurement (if applicable, or "N/A")
+- "Target": Any targets mentioned (or "Not Available")
+- "Action": Actions or measures described (or "Not Available")
+
+If information is not available in the reference content, explicitly state "Not Available" for that field.
+"""
+        return prompt
 
 
 # ----------------------------------------------------------------------
