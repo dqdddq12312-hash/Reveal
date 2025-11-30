@@ -163,6 +163,59 @@ class ESGReportPreprocessor:
             table_regions_per_page[page_index] = table_regions
         return table_regions_per_page
 
+    def _extract_table_with_fitz(
+        self, page: fitz.Page, clip_rect: fitz.Rect
+    ) -> Optional[List[List[str]]]:
+        """Fallback table extraction using PyMuPDF's built-in table finder."""
+
+        try:
+            finder = page.find_tables(clip=clip_rect)
+        except Exception as exc:  # pragma: no cover - best-effort helper
+            print(f"[WARN] PyMuPDF table fallback failed: {exc}")
+            return None
+
+        tables = list(getattr(finder, "tables", []))
+        if not tables:
+            try:
+                finder = page.find_tables()
+                tables = list(getattr(finder, "tables", []))
+            except Exception:
+                tables = []
+
+        best_table = None
+        best_overlap = 0.0
+        clip_area = max(clip_rect.get_area(), 1e-6)
+
+        for table in tables:
+            try:
+                table_rect = fitz.Rect(table.bbox)
+            except Exception:
+                continue
+            intersection = clip_rect & table_rect
+            if intersection.is_empty:
+                continue
+            overlap_ratio = intersection.get_area() / clip_area
+            if overlap_ratio > best_overlap:
+                best_table = table
+                best_overlap = overlap_ratio
+
+        if best_table is None:
+            return None
+
+        extracted_rows = []
+        for row in best_table.extract():
+            normalised_row: List[str] = []
+            for cell in row:
+                if cell is None:
+                    normalised_row.append("")
+                    continue
+                cell_text = " ".join(str(cell).split())
+                normalised_row.append(cell_text)
+            if any(col for col in normalised_row):
+                extracted_rows.append(normalised_row)
+
+        return extracted_rows or None
+
     def parse_pdf(
         self, pdf_path: str
     ) -> Tuple[List[str], List[Tuple[int, str]], List[List[List[str]]]]:
@@ -174,6 +227,22 @@ class ESGReportPreprocessor:
             tables: list of tables, each table is a list of rows, each row a list of cell texts
         """
         doc = fitz.open(pdf_path)
+
+        def _count_non_empty_cells(rows: List[List[str]]) -> int:
+            return sum(
+                1
+                for row in rows
+                for cell in row
+                if isinstance(cell, str) and cell.strip()
+            )
+
+        def _count_numeric_cells(rows: List[List[str]]) -> int:
+            return sum(
+                1
+                for row in rows
+                for cell in row
+                if isinstance(cell, str) and any(ch.isdigit() for ch in cell)
+            )
 
         # 1) Table region detection (per page)
         table_regions_per_page = self._detect_table_regions(doc)
@@ -387,7 +456,12 @@ class ESGReportPreprocessor:
 
                     # Fallback: if structure is empty, treat each text line as a single-cell row
                     if not row_boxes or not col_boxes:
-                        clip_rect = fitz.Rect(x0, y0, x1, y1)
+                        clip_rect = fitz.Rect(rx0, ry0, rx1, ry1)
+                        fitz_rows = self._extract_table_with_fitz(page, clip_rect)
+                        if fitz_rows:
+                            assembled_tables.append(fitz_rows)
+                            continue
+
                         raw_text = page.get_text("text", clip=clip_rect)
                         rows = [
                             [ln.strip()]
@@ -421,13 +495,13 @@ class ESGReportPreprocessor:
                                 sx0, sy0, sx1, sy1 = sb
                                 cx = (sx0 + sx1) / 2.0
                                 cy = (sy0 + sy1) / 2.0
-                                if x0 <= cx <= x1 and y0 <= cy <= y1:
+                                if rx0 <= cx <= rx1 and ry0 <= cy <= ry1:
                                     table_spans.append((cx, cy, sx0, sy0, span_text))
 
                     # Assign spans to cells based on centre position (relative to table region)
                     for cx, cy, sx0, sy0, span_text in table_spans:
-                        rel_x = cx - x0
-                        rel_y = cy - y0
+                        rel_x = cx - rx0
+                        rel_y = cy - ry0
 
                         row_idx: Optional[int] = None
                         col_idx: Optional[int] = None
@@ -453,6 +527,36 @@ class ESGReportPreprocessor:
                             if existing
                             else span_text.strip()
                         )
+
+                    clip_rect = fitz.Rect(rx0, ry0, rx1, ry1)
+                    filled_cells = _count_non_empty_cells(table_cells)
+                    numeric_cells = _count_numeric_cells(table_cells)
+                    total_cells = max(len(table_cells) * len(table_cells[0]), 1)
+                    fill_ratio = filled_cells / total_cells
+
+                    prefer_fitz = False
+                    if filled_cells == 0 or numeric_cells < 3 or fill_ratio < 0.25 or len(table_cells[0]) <= 2:
+                        fitz_rows = self._extract_table_with_fitz(page, clip_rect)
+                        if fitz_rows:
+                            fitz_numeric = _count_numeric_cells(fitz_rows)
+                            fitz_filled = _count_non_empty_cells(fitz_rows)
+                            if fitz_numeric > numeric_cells or fitz_filled > filled_cells:
+                                assembled_tables.append(fitz_rows)
+                                prefer_fitz = True
+
+                    if prefer_fitz:
+                        continue
+
+                    if filled_cells == 0:
+                        raw_text = page.get_text("text", clip=clip_rect)
+                        rows = [
+                            [ln.strip()]
+                            for ln in raw_text.splitlines()
+                            if ln.strip()
+                        ]
+                        if rows:
+                            assembled_tables.append(rows)
+                        continue
 
                     assembled_tables.append(table_cells)
 
