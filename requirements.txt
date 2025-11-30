@@ -13,3 +13,4 @@ protobuf
 timm
 huggingface_hub[hf_xet]
 openai
+sentencepiece
