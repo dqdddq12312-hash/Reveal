@@ -1,0 +1,842 @@
+[
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-16587f71",
+    "aspect": "A1. Emissions",
+    "kpi": "Policies, governance and compliance related to air emissions, discharges into water and land, and hazardous waste handling.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.108: | | | | oxides (SO ), and other | | | | | | Waste (2020) | | 7, 8, 9 | | Management approach | ESG report p.44, 46-47 | | | Aspect A3 GD | | Packaging and Waste | 103-3 | | | | | | | KPI A3.1 | | | | | – | waste-related impacts | | 306-2 | | | Management of significant | ESG report p.44-47 | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | ..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-8c36da21",
+    "aspect": "A1. Emissions",
+    "kpi": "Types of key air emissions (e.g. NOx, SOx, particulates) and the related emission data.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 48,
+      "tables": 6
+    },
+    "evidence_summary": "Text p.1 (About this Report): You can access our 2021 Annual Report, historical ESG Reports, policies, responses to the CDP Climate Change and Water Security Questionnaires, as well as our Supplier Engagement Rating, on our website (www.budweiserapac.com). Our website also showcases our ESG journey and how our priority areas align with the Unite... | Table p.2: Our Approach to ESG Our ESG Priorities | | Dream-People-Culture: | | Economic Value and Financial | 10 | | | | 11 | | | | 12 | | 12 | | 15 | | 16 | | 16 | | 18 19 | | 20 | Stakeholder Engagement | | | | Environment: Realizing our 2025 | 24 25 36 44 | Sustainability Goals | 21 50 | Sustainability Our Value Chain ESG Highlights ESG Factsheet Our Response to COVID-19 Corporate Governance Ethics and Transparency ESG Governance Risk Management and Internal Control Materiality Assessment and Climat..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-6d88f749",
+    "aspect": "A1. Emissions",
+    "kpi": "Direct (Scope 1) and energy‑indirect (Scope 2) greenhouse gas emissions, together with intensity indicators.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 42,
+      "tables": 3
+    },
+    "evidence_summary": "Text p.11 (Driving financial sustainability): Of most note in 2021, we made significant investments to realize our greenhouse gas emission (“GHG”) reduction targets and deliver on our RE100 commitment to source 100% of our electricity from renewable sources. We built our first carbon neutral brewery in Wuhan, and we will continue to apply this innovative invest... | Table p.95: • For recycled content calculation, a weighted average of recycled content is calculated based on purchases for each supplier and the recycled content percentage in the material. Our packaging goal applies to our primary packaging this represents more than 85% of our total packaging volume by weight globally, though our work in circularity extends to secondary packaging of the 15 categories: purchased good and services, upstream and downstream distribution, emissions related to fuel use not i..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-3f56aee5",
+    "aspect": "A1. Emissions",
+    "kpi": "Scope 1 greenhouse gas emissions by major source (fuel combustion, process emissions) and related intensity.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 2
+    },
+    "evidence_summary": "Table p.96: Metrics | Unit | 2021 | 2020 | 2019 | 2018 GHG Emissions | | | | | Total GHG Emissions tCOe 2 | | 6,595,909 | 6,518,208 | 7,602,891 | 7,024,676 Scope 1 Emissions2 tCOe 2 | | 158,733 | 183,980 | 257,845 | 287,350 Scope 2 Emissions3 tCOe 2 | | 433,891 | 462,137 | 489,318 | 658,381 Scope 3 Emissions4 tCOe 2 | | 6,003,286 | 5,872,091 | 6,855,728 | 6,078,945 GHG Emissions Intensity (Scope 1 and 2) kgCOe/hl 2 | | 6.95 | 8.15 | 8.58 | 10.53 GHG Emissions Intensity (Scope 1, 2 and 3) kgCOe/hl 2 | | 7..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-a09dd734",
+    "aspect": "A1. Emissions",
+    "kpi": "Scope 2 greenhouse gas emissions, separated into location-based and market-based values where available, plus intensity.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.73 (Cohort 2021:): • Cosmose is an AI-driven location-based solution by leveraging sales tech and router network. It enables the field representatives to build geo fencing during visits and for the company clients to retarget consumers in geo fences. | Table p.96: Metrics | Unit | 2021 | 2020 | 2019 | 2018 GHG Emissions | | | | | Total GHG Emissions tCOe 2 | | 6,595,909 | 6,518,208 | 7,602,891 | 7,024,676 Scope 1 Emissions2 tCOe 2 | | 158,733 | 183,980 | 257,845 | 287,350 Scope 2 Emissions3 tCOe 2 | | 433,891 | 462,137 | 489,318 | 658,381 Scope 3 Emissions4 tCOe 2 | | 6,003,286 | 5,872,091 | 6,855,728 | 6,078,945 GHG Emissions Intensity (Scope 1 and 2) kgCOe/hl 2 | | 6.95 | 8.15 | 8.58 | 10.53 GHG Emissions Intensity (Scope 1, 2 and 3) kgCOe/hl 2 | | 7..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-40a5669b",
+    "aspect": "A1. Emissions",
+    "kpi": "Total hazardous waste generated and the corresponding intensity per activity unit.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.46 (Primary packaging by market): Non-hazardous waste Hazardous waste Total waste generated | Table p.96: Metrics | Unit | 2021 | 2020 | 2019 | 2018 GHG Emissions | | | | | Total GHG Emissions tCOe 2 | | 6,595,909 | 6,518,208 | 7,602,891 | 7,024,676 Scope 1 Emissions2 tCOe 2 | | 158,733 | 183,980 | 257,845 | 287,350 Scope 2 Emissions3 tCOe 2 | | 433,891 | 462,137 | 489,318 | 658,381 Scope 3 Emissions4 tCOe 2 | | 6,003,286 | 5,872,091 | 6,855,728 | 6,078,945 GHG Emissions Intensity (Scope 1 and 2) kgCOe/hl 2 | | 6.95 | 8.15 | 8.58 | 10.53 GHG Emissions Intensity (Scope 1, 2 and 3) kgCOe/hl 2 | | 7..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-49ac182f",
+    "aspect": "A1. Emissions",
+    "kpi": "Total non‑hazardous waste generated and the corresponding intensity per activity unit.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 3,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.45 (Document): circular packaging helps us to reduce our impact on the world’s limited resources as well as deliver long-term financial cost-benefits. Circularity further helps us to address climate change, as packaging is accountable for a significant proportion (49%) of our overall GHG emissions. Tackling issues on packaging and..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-0028b16b",
+    "aspect": "A1. Emissions",
+    "kpi": "Total wastewater and effluent discharged and, where available, pollutant concentrations or intensity per facility.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 9,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.0 (ENVIRONMENTAL, SOCIAL AND GOVERNANCE  REPORT 2021): Stock Code: 1876 | Table p.113: | 419-1 – | | Non-compliance with laws and economic area Description of practices relating | incidents of non-compliance in relating to products and material impact on Bud APAC. Intellectual Property | | | intellectual property rights | | – | | Number of products and service how they are dealt with. | In FY21, Bud APAC complied regulations and had established Complaint stood at 94.26 (“ppb”), compared with | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-22d70c89",
+    "aspect": "A1. Emissions",
+    "kpi": "Emission‑reduction objectives set by the company and progress or actions taken to meet those objectives.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-17074cf1",
+    "aspect": "A1. Emissions",
+    "kpi": "Methods for handling hazardous and non‑hazardous waste, together with reduction targets and measures implemented.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.23 (Document): Circular Packaging Packaging strategy D Waste management E"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A1-2980aaa6",
+    "aspect": "A1. Emissions",
+    "kpi": "Processes for wastewater treatment, spill prevention and soil contamination control, including monitoring and response actions.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-e669133b",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Policies and governance for efficient use of energy, water, raw materials and packaging, including compliance with relevant regulations.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.37 (Document): Roughly 10% of our breweries are located in proximity to watersheds identified as facing “high water stress” in India. Every drop counts and, as the world’s leading brewer, it is our role to work towards water stewardship throughout our operations and value chain. In the reporting year, we have updated our Water Pol..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-dacb3674",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Total direct and indirect energy consumption by type and energy intensity.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 5,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.28 (Our Carbon Footprint): Energy intensity of own operations | Table p.99: | | | | | Energy Consumption Scope 1 Emissions (in tCO e) 2 | Percentage of renewable electricity (in %) Scope 3 Emissions (in tCO e) | 2 2 2 e/hl) |"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-066751bb",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Renewable energy consumption (self-generated and procured) and its share of total energy use.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 8,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.15 (Document): Implemented scaled, solar power projects in our glass and aluminum can suppliers, driven by our renewable energy strategy"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-8569d9f7",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Renewable energy sourcing strategy, including procurement instruments, onsite projects and future targets.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 7,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.26 (Our Ambition and Progress): 4 World Economic Forum Global Risk Report 2021: https://www3.weforum.org/docs/WEF_The_Global_Risks_Report_2021.pdf 5 Our GHG deduction targets are in line with AB InBev and approved by the Science Based Targets initiative (“SBTi”), reinforcing our commitment towards mitigating the impacts of climate change."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-be9a325f",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Total water consumption and water‑use intensity.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 11,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.38 (Our Water Footprint): Relevant water users"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-f60c251c",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Targets for improving energy efficiency and actions taken to achieve them.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-43b43e7b",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Issues in sourcing water fit for use, and any water‑efficiency targets and measures.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 4,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.37 (Document): Without water there is no beer. The combined effects of population growth, economic development, and climate change have contributed to increasing water stress on a global scale. Increasing demand and pollution, together"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-36f6a4dd",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Consumption of key raw or packaging materials (e.g. metals, plastics, paper) and intensity per unit of output.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.45 (Document): GRI 301, 306 HKEX A1, A2, A3, B5"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-39bacfcf",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Total packaging materials used for finished products and, where relevant, packaging intensity.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 8,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.32 (Document): We have developed lightweighting, which means reducing the weight of our bottles and cans, as well as sourcing packaging materials made from recycled content."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A2-5069a35b",
+    "aspect": "A2. Use of Resources",
+    "kpi": "Initiatives to reduce packaging impact, increase recycled content or eliminate single-use materials, and results achieved.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 21,
+      "tables": 2
+    },
+    "evidence_summary": "Text p.3 (Accelerating our Sustainability Goals  and Growing with our Stakeholders): Relentless focus on our ESG strategy allows us to create measurable positive impacts and drive continuous growth. In 2021, through technological innovation and industry partnerships, we made substantial strides in our 2025 Sustainability Goals for Climate Action, Water Stewardship, Circular Packaging and Smart Agric... | Table p.47: ecycling contents With a focus on reducing the need for virgin materials here possible, we have developed new technology to chieve 90% recycled content in our glass bottles in hina. M W w m o m"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A3-a44c0652",
+    "aspect": "A3. Environment and Natural Resources",
+    "kpi": "Policies and governance processes for minimising significant impacts on the environment and natural resources.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.51 (Document): A vital part of growing Bud APAC’s business sustainably for the next 100+ years is to preserve critical ecosystem services and the availability of raw materials and natural resources such as barley, hops, and water as our production and operation rely heavily on them. As we continuously aim to minimize our environme..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A3-a1e0d4a4",
+    "aspect": "A3. Environment and Natural Resources",
+    "kpi": "Significant impacts of the company’s activities on the environment and natural resources, and actions taken to manage them.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A3-1596876d",
+    "aspect": "A3. Environment and Natural Resources",
+    "kpi": "Biodiversity conservation or habitat restoration programmes, offsets and partnerships, including progress metrics.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A4-347e2b63",
+    "aspect": "A4. Climate Change",
+    "kpi": "Policies, governance arrangements and compliance processes for identifying and managing climate-related risks and opportunities.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.26 (Our Ambition and Progress): We recognize the urgent need for climate action and, in FY21, released our Climate Policy outlining our ambition and our commitment to implementing best practices in mitigation and helping our partners to adapt. As we look beyond our 2025 Sustainability Goals, we have set our sights on achieving net zero by 2040 thr..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "A4-65d4a7b3",
+    "aspect": "A4. Climate Change",
+    "kpi": "Major climate‑related issues that affect or could affect the company, and actions taken to manage them.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 3,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.26 (Why it Matters): threats faced by human society in the long-term 4 . Our business is closely tied to the natural environment, which is vulnerable to climate impacts, as our beer relies on high-quality agricultural commodities, raw materials for packaging, water resources and energy. As the largest beer company in APAC, we leverage o..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-9511770b",
+    "aspect": "B1. Employment",
+    "kpi": "Policies, governance arrangements and compliance with laws on compensation, recruitment, working hours and equal opportunity.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.109: | 103-2 | | | disclosure | | | | | | | | | | | | | | | | diversity, anti-discrimination, | 401-1 | | | New employees hiring and | In FY21, there were no reported with laws and regulations dismissal, recruitment and which had a significant impact ESG report p.96 the information, Bud APAC does turnover rate by region at this | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | ESG report p.80, 82, 87 incidents of non-compliance relating to compensation and promotion, ..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-3f6ffef4",
+    "aspect": "B1. Employment",
+    "kpi": "Total workforce, broken down by gender, employment type, age group and geographic region.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 12,
+      "tables": 2
+    },
+    "evidence_summary": "Text p.1 (About this Report): T h i s R e p o r t c o v e r s o u r p r o g r e s s a n d performance on our Environmental, Social and Governance (“ESG”) journey from 1 January to 31 December 2021 (“FY21”). Unless otherwise specified, the reporting scope of this Report is the same as our 2021 Annual Report, covering Bud APAC and all of our subsi... | Table p.97: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Employment | | | | | Total Employees No. | | 26,363 | 26,489 | 28,546 | 30,085 Number of employees by employment type | | | | | Full-Time | | 21,059 | 22,004 | 22,935 | 25,123 Male No. | | 15,524 | 16,260 | 16,899 | 18,085 Female No. | | 5,535 | 5,744 | 6,036 | 7,038 Part-Time | | 5,304 | 4,485 | 5,611 | 4,962 Male No. | | 0 | 0 | 0 | 0 Female No. | | 5,304 | 4,485 | 5,611 | 4,962 Number of employees by employment contract | | | | | Permanent No. | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-71706e51",
+    "aspect": "B1. Employment",
+    "kpi": "Workforce by employment type (full-time, part-time, contract) with totals and percentages.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.97: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Employment | | | | | Total Employees No. | | 26,363 | 26,489 | 28,546 | 30,085 Number of employees by employment type | | | | | Full-Time | | 21,059 | 22,004 | 22,935 | 25,123 Male No. | | 15,524 | 16,260 | 16,899 | 18,085 Female No. | | 5,535 | 5,744 | 6,036 | 7,038 Part-Time | | 5,304 | 4,485 | 5,611 | 4,962 Male No. | | 0 | 0 | 0 | 0 Female No. | | 5,304 | 4,485 | 5,611 | 4,962 Number of employees by employment contract | | | | | Permanent No. | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-1213e8d6",
+    "aspect": "B1. Employment",
+    "kpi": "Employee headcount by age group (e.g. under 30, 30–50, over 50) and corresponding percentages.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.39 (Water withdrawal and risk assessment): In the past ten years, we have constructed over 500 | Table p.97: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Employment | | | | | Total Employees No. | | 26,363 | 26,489 | 28,546 | 30,085 Number of employees by employment type | | | | | Full-Time | | 21,059 | 22,004 | 22,935 | 25,123 Male No. | | 15,524 | 16,260 | 16,899 | 18,085 Female No. | | 5,535 | 5,744 | 6,036 | 7,038 Part-Time | | 5,304 | 4,485 | 5,611 | 4,962 Male No. | | 0 | 0 | 0 | 0 Female No. | | 5,304 | 4,485 | 5,611 | 4,962 Number of employees by employment contract | | | | | Permanent No. | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-70e1036b",
+    "aspect": "B1. Employment",
+    "kpi": "Employee headcount by geographic region (e.g. Hong Kong, Mainland China, Overseas) and related percentages.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B1-449d4f7b",
+    "aspect": "B1. Employment",
+    "kpi": "Employee turnover rate by gender, age group and geographic region.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.97: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Employment | | | | | Total Employees No. | | 26,363 | 26,489 | 28,546 | 30,085 Number of employees by employment type | | | | | Full-Time | | 21,059 | 22,004 | 22,935 | 25,123 Male No. | | 15,524 | 16,260 | 16,899 | 18,085 Female No. | | 5,535 | 5,744 | 6,036 | 7,038 Part-Time | | 5,304 | 4,485 | 5,611 | 4,962 Male No. | | 0 | 0 | 0 | 0 Female No. | | 5,304 | 4,485 | 5,611 | 4,962 Number of employees by employment contract | | | | | Permanent No. | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B2-48bc7f7c",
+    "aspect": "B2. Health and Safety",
+    "kpi": "Policies and compliance processes for occupational health and safety, including governance and monitoring systems.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.92 (Procedures and standards): Our Health and Safety Policy and associated management system aims to protect the health and safety of our colleagues and contractors. We have operational procedures and safety standards for our production process, including fire safety, warehouse safety, work-related injuries, electricity safety, emergency and evac..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B2-d325b081",
+    "aspect": "B2. Health and Safety",
+    "kpi": "Number and rate of work‑related fatalities in each of the past three years, including the reporting year.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B2-a1f57b7a",
+    "aspect": "B2. Health and Safety",
+    "kpi": "Total lost days due to work injuries.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B2-bde09aed",
+    "aspect": "B2. Health and Safety",
+    "kpi": "Number of recordable work-related injuries and associated injury rates (e.g. LTIR, TRIR).",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B2-d5f4cfc7",
+    "aspect": "B2. Health and Safety",
+    "kpi": "Occupational health and safety measures adopted and how these measures are implemented and monitored.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 3,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.14 (Carbon neutral  brewery  in Wuhan,  China, the first of its  kind in the Chinese  brewing industry): Comprehensive water risk assessment to monitor water issues where we operate and within the supply chain, including areas where we source our agricultural commodities"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B3-302c416b",
+    "aspect": "B3. Development and Training",
+    "kpi": "Policies for improving employee skills, training governance and how programmes are evaluated.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 3,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.17 (Corporate Governance): • Making recommendations to the Board on the appointment and re-appointment of Directors and succession planning for Directors"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B3-14b645a0",
+    "aspect": "B3. Development and Training",
+    "kpi": "Percentage of employees who received training, by gender and employee category.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 2
+    },
+    "evidence_summary": "Table p.97: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Employment | | | | | Total Employees No. | | 26,363 | 26,489 | 28,546 | 30,085 Number of employees by employment type | | | | | Full-Time | | 21,059 | 22,004 | 22,935 | 25,123 Male No. | | 15,524 | 16,260 | 16,899 | 18,085 Female No. | | 5,535 | 5,744 | 6,036 | 7,038 Part-Time | | 5,304 | 4,485 | 5,611 | 4,962 Male No. | | 0 | 0 | 0 | 0 Female No. | | 5,304 | 4,485 | 5,611 | 4,962 Number of employees by employment contract | | | | | Permanent No. | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B3-63a38747",
+    "aspect": "B3. Development and Training",
+    "kpi": "Average training hours completed per employee, by gender and employee category.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.98: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Percentage of employees trained by employee category | | | | | Managers % | | 99 | 97 | 87 | 88 Non-managers % | | 89 | 88 | 77 | 46 Average Training Hours | | | | | Average training hours by gender | | | | | Male Hours | | 26 | 11 | 6 | 7 Female Hours | | 27 | 11 | 6 | 6 Average training hours by employee category | | | | | Managers Hours | | 36 | 11 | 7 | 10 Non-managers Hours | | 23 | 10 | 6 | 6 Health and Safety | | | | | Number of work-related f..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B4-6fc6c822",
+    "aspect": "B4. Labour Standards",
+    "kpi": "Policies and compliance controls to prevent child labour and forced labour across operations and the supply chain.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B4-a0c6f296",
+    "aspect": "B4. Labour Standards",
+    "kpi": "Measures to review employment practices to prevent child labour and forced labour.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.57 (Document): We require all suppliers and business partners to follow our Responsible Sourcing Policy . We also have an Anti-Corruption Policy specifically for our suppliers and a Human Rights Policy that directs our operations along our value chain, covering our suppliers and contractors. | Table p.111: | | | | review employment practices to | | – | | | Description of steps taken to | | | | | discovered | Human Rights Policy Forced or Compulsory | 103-1 | | – | disclosure | | 103-2 103-3 | | | | | 409-1 | | | Operations and suppliers at | | | | | forced or compulsory labor | | | | | | any operations or suppliers | | | | | concerning issues related to | | | | | On an annual basis, we assess | | | | | | | | | | suppliers based on compliance well as requirements stipulated Policy. | | | | | | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B4-97acb6e6",
+    "aspect": "B4. Labour Standards",
+    "kpi": "Steps taken to eliminate child or forced labour practices when they are identified.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.84 (Document): At the end of 2021, Mercer repeated the independent study on pay equity for Bud APAC. The results show that we have reduced the gender pay gap from -3% to -1%. This difference in adjusted compensation for women compared to men was not statistically significant. However, as it is important to demonstrate our commitme..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B5-001dc85d",
+    "aspect": "B5. Supply Chain Management",
+    "kpi": "Number of suppliers, broken down by geographic region.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B5-40c4afc1",
+    "aspect": "B5. Supply Chain Management",
+    "kpi": "Number of suppliers assessed or audited for environmental and social risks during the year, and coverage percentage.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B5-16dae48d",
+    "aspect": "B5. Supply Chain Management",
+    "kpi": "Practices for engaging suppliers, the number of suppliers subject to these practices, and how they are implemented and monitored.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.58 (Document): Supplier assessments | Table p.24: | | | | | | We partner with valued retailers, bar bring our beers to our consumers. | | Customer services Important notices regarding products Various social media sites Sustainability activities | | Our consumers are the boss. Beer life experiences. | | Important notices regarding products Various social media sites Sustainability activities | | We are closely connected to the | | • Drinking Goals Activities supporting communities | | We value the trust of our shareholders positive results. ..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B5-586da148",
+    "aspect": "B5. Supply Chain Management",
+    "kpi": "Practices used to identify environmental and social risks along the supply chain and how these practices are implemented and monitored.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B5-4519207f",
+    "aspect": "B5. Supply Chain Management",
+    "kpi": "Practices used to promote environmentally preferable products and services when selecting suppliers and how they are implemented and monitored.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.47 (Manufacturing): We adopt green procurement practices to reduce waste at the source by eliminating single-use materials and supplies. We also optimize our operations to minimize waste generation while maximizing opportunities to repurpose waste."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-94108590",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Percentage of total products sold or shipped that were subject to recalls for safety and health reasons.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-06dc6657",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Number of product and service‑related complaints received and how these complaints were resolved.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.21 (Risk Management and Internal Control): 2 Our Compliance Hotline can be accessed at http://www.budweiserapac.com/caseReport."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-9e9eac28",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Number of substantiated customer data privacy or cybersecurity incidents and individuals affected.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-3bcda2b3",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Practices for observing and protecting intellectual property rights.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.113: | 419-1 – | | Non-compliance with laws and economic area Description of practices relating | incidents of non-compliance in relating to products and material impact on Bud APAC. Intellectual Property | | | intellectual property rights | | – | | Number of products and service how they are dealt with. | In FY21, Bud APAC complied regulations and had established Complaint stood at 94.26 (“ppb”), compared with | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-7b9a7e45",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Quality assurance processes and recall procedures for products and services.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B6-bf36781d",
+    "aspect": "B6. Product Responsibility",
+    "kpi": "Policies on consumer data protection and privacy and how they are implemented and monitored.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B7-e3a8ff8e",
+    "aspect": "B7. Anti-corruption",
+    "kpi": "Number of concluded legal cases involving corrupt practices against the company or its employees during the reporting period and the outcomes.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B7-22effdb7",
+    "aspect": "B7. Anti-corruption",
+    "kpi": "Preventive measures and whistle‑blowing mechanisms, and how these are implemented and monitored.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 6,
+      "tables": 2
+    },
+    "evidence_summary": "Text p.17 (Corporate Governance): • Overseeing the financial reporting system and internal control procedures of the Company | Table p.2: Our Approach to ESG Our ESG Priorities | | Dream-People-Culture: | | Economic Value and Financial | 10 | | | | 11 | | | | 12 | | 12 | | 15 | | 16 | | 16 | | 18 19 | | 20 | Stakeholder Engagement | | | | Environment: Realizing our 2025 | 24 25 36 44 | Sustainability Goals | 21 50 | Sustainability Our Value Chain ESG Highlights ESG Factsheet Our Response to COVID-19 Corporate Governance Ethics and Transparency ESG Governance Risk Management and Internal Control Materiality Assessment and Climat..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B7-80ae6226",
+    "aspect": "B7. Anti-corruption",
+    "kpi": "Anti‑corruption training provided to directors and staff.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 1
+    },
+    "evidence_summary": "Table p.98: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Percentage of employees trained by employee category | | | | | Managers % | | 99 | 97 | 87 | 88 Non-managers % | | 89 | 88 | 77 | 46 Average Training Hours | | | | | Average training hours by gender | | | | | Male Hours | | 26 | 11 | 6 | 7 Female Hours | | 27 | 11 | 6 | 6 Average training hours by employee category | | | | | Managers Hours | | 36 | 11 | 7 | 10 Non-managers Hours | | 23 | 10 | 6 | 6 Health and Safety | | | | | Number of work-related f..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B8-6017ca57",
+    "aspect": "B8. Community Investment",
+    "kpi": "Main focus areas of community contribution, such as education, environment, health or culture.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.58 (Document): On an annual basis, we assess existing direct and critical suppliers 7 based on compliance with laws and regulations, financial performance and ESG- related issues (such as child or forced labor, freedom of association, collective bargaining, occupational health and safety and environmental initiatives) that are add..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "B8-b570d946",
+    "aspect": "B8. Community Investment",
+    "kpi": "Resources contributed to community programmes, for example monetary donations or volunteering time.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G1-9d73cb2c",
+    "aspect": "G1. Board Composition and Independence",
+    "kpi": "Number of directors on the board and percentage of independent non‑executive directors.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 21,
+      "tables": 3
+    },
+    "evidence_summary": "Text p.0 (About Bud APAC): Budweiser Brewing Company APAC Limited (“We”, the “Company” or “Bud APAC”), a company incorporated in the Cayman Islands with limited liability, is delighted to present you the third Environmental, Social and Governance (“ESG”) Report (the “Report”) which provides information about progress towards our 2025 Sustaina... | Table p.98: Metrics | Unit | 2021 | 2020 | 2019 | 2018 Percentage of employees trained by employee category | | | | | Managers % | | 99 | 97 | 87 | 88 Non-managers % | | 89 | 88 | 77 | 46 Average Training Hours | | | | | Average training hours by gender | | | | | Male Hours | | 26 | 11 | 6 | 7 Female Hours | | 27 | 11 | 6 | 6 Average training hours by employee category | | | | | Managers Hours | | 36 | 11 | 7 | 10 Non-managers Hours | | 23 | 10 | 6 | 6 Health and Safety | | | | | Number of work-related f..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G2-1e02c61f",
+    "aspect": "G2. Board Diversity",
+    "kpi": "Number and percentage of female directors on the board.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G3-75d20681",
+    "aspect": "G3. Board Meetings and Attendance",
+    "kpi": "Number of board meetings held during the year and the average attendance rate of directors.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G4-6ba90e5b",
+    "aspect": "G4. Board Committees",
+    "kpi": "Number of key board committees and meetings held by each committee during the year.",
+    "assistant_disclosure": "Partial",
+    "evidence_counts": {
+      "text": 6,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.17 (Corporate Governance): Audit Committee"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G5-5dee3780",
+    "aspect": "G5. Roles and Responsibilities of the Board",
+    "kpi": "Description of the board’s overall responsibilities and the division of responsibilities between the board and management.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G6-c5efba05",
+    "aspect": "G6. Board Diversity Policy",
+    "kpi": "Description of the board diversity policy and how it is implemented and monitored.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.18 (Male 57 %): We have a Board Diversity Policy that sets out our approach to achieve diversity on the Board. Measurable objectives with specific targets are set and reviewed regularly to ensure the effectiveness and accountability of the Board. Criteria and considerations for Board appointments are based on the Terms of Reference..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G7-f0f1efa3",
+    "aspect": "G7. Risk Management and Internal Control",
+    "kpi": "Description of the risk management and internal control systems and their effectiveness.",
+    "assistant_disclosure": "Missing",
+    "evidence_counts": {
+      "text": 0,
+      "tables": 0
+    },
+    "evidence_summary": "No tagged evidence located in processed knowledge base."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G8-bfe5aadd",
+    "aspect": "G8. ESG Governance and Oversight",
+    "kpi": "Description of the governance structure for ESG matters, including the board’s role in oversight.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.20 (Document): With direct oversight from senior management, the cross-departmental ESG Committee supervises the Company’s overall ESG strategies and goals. The ESG Committee is responsible for overseeing, planning and reviewing matters related to Bud APAC’s ESG journey, and leads the ESG Working Group to implement ESG initiatives..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G9-333ec0a4",
+    "aspect": "G9. Remuneration Governance",
+    "kpi": "Description of the remuneration policy for directors and senior management and how it aligns with long‑term performance.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 6,
+      "tables": 1
+    },
+    "evidence_summary": "Text p.20 (Document): With direct oversight from senior management, the cross-departmental ESG Committee supervises the Company’s overall ESG strategies and goals. The ESG Committee is responsible for overseeing, planning and reviewing matters related to Bud APAC’s ESG journey, and leads the ESG Working Group to implement ESG initiatives... | Table p.109: | 103-2 | | | disclosure | | | | | | | | | | | | | | | | diversity, anti-discrimination, | 401-1 | | | New employees hiring and | In FY21, there were no reported with laws and regulations dismissal, recruitment and which had a significant impact ESG report p.96 the information, Bud APAC does turnover rate by region at this | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | ESG report p.80, 82, 87 incidents of non-compliance relating to compensation and promotion, ..."
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G10-18990516",
+    "aspect": "G10. Shareholder Engagement",
+    "kpi": "Description of policies and channels for communicating with and engaging shareholders.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 2,
+      "tables": 2
+    },
+    "evidence_summary": "Text p.1 (About this Report): We welcome any suggestions, comments and questions about our Report and our sustainability performance. Enquiries for the Company may be directed to the Company’s investor relations team at IR@budweiserapac.com. | Table p.24: | | • | | | | | | | | brings people together to celebrate | | • • | | • communities where we live and work. | | • Initiatives of our Global Smart Activities supporting communities | | We value the trust of our shareholders and are constantly working to provide | | Important notices regarding products Sustainability activities • • Annual and interim reports • General meetings of shareholders and presentations"
+  },
+  {
+    "report": "BudweiserAPAC_2022_ESG",
+    "indicator_id": "G11-b7eb668c",
+    "aspect": "G11. Ethics and Whistle‑blowing Governance",
+    "kpi": "Description of the governance framework for ethics, anti‑corruption and whistle‑blowing.",
+    "assistant_disclosure": "Disclosed",
+    "evidence_counts": {
+      "text": 1,
+      "tables": 0
+    },
+    "evidence_summary": "Text p.100 (Our Independence and Quality Control): We have complied with the independence and other ethical requirements of the International Code of Ethics for Professional Accountants (including International Independence Standards) issued by the International Ethics Standards Board for Accountants, which is founded on fundamental principles of integrity, objectiv..."
+  }
+]
