@@ -14,10 +14,25 @@ Three pillars:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from typing import List, Dict, Iterable
+from dataclasses import dataclass, field, asdict
+from typing import List, Dict, Iterable, Optional, Tuple, Any
 from pathlib import Path
 import json
+import hashlib
+
+
+# ----------------------------------------------------------------------------
+# Schema metadata + changelog
+# ----------------------------------------------------------------------------
+
+METADATA_SCHEMA_VERSION = "1.1.0"
+METADATA_CHANGELOG: Dict[str, List[str]] = {
+    "1.1.0": [
+        "Added indicator_id, evidence typing, retrieval hints, priority scoring, and dependency metadata.",
+        "Introduced schema validation helpers and QA hooks for numeric/time-series expectations.",
+    ],
+    "1.0.0": ["Initial HKEx metadata set aligned with ESGReveal structure."],
+}
 
 
 # ----------------------------------------------------------------------
@@ -33,14 +48,115 @@ class ESGMetadataRecord:
     quantity: str          # "Absolute Values" | "Key Actions"
     search_terms: List[str]
     knowledge: str
+    indicator_id: Optional[str] = None
+    evidence_type: str = "auto"  # auto | quantitative | qualitative | policy
+    regex_hints: List[str] = field(default_factory=list)
+    multilingual_synonyms: List[str] = field(default_factory=list)
+    canonical_units: List[str] = field(default_factory=list)
+    priority: str = "medium"  # low | medium | high | critical
+    dependency_groups: List[str] = field(default_factory=list)
+    expected_year_span: Optional[int] = None
 
-    def to_entity_tuple(self):
+    def __post_init__(self) -> None:
+        if not self.indicator_id:
+            slug = self._slugify_aspect()
+            digest = hashlib.sha1(f"{self.aspect}|{self.kpi}".encode("utf-8")).hexdigest()[:8]
+            self.indicator_id = f"{slug}-{digest}"
+        self.evidence_type = self._resolve_evidence_type(self.evidence_type)
+        self.priority = self._normalise_priority(self.priority)
+        self._ensure_canonical_units()
+
+    def _slugify_aspect(self) -> str:
+        return self.aspect.split()[0].replace(".", "").upper()
+
+    def _resolve_evidence_type(self, value: str) -> str:
+        normalised = (value or "auto").strip().lower()
+        if normalised in {"quantitative", "qualitative", "policy"}:
+            return normalised
+        if normalised == "auto":
+            return "quantitative" if self.quantity.lower() == "absolute values" else "qualitative"
+        return "qualitative"
+
+    @staticmethod
+    def _normalise_priority(value: str) -> str:
+        value = (value or "medium").strip().lower()
+        return value if value in {"low", "medium", "high", "critical"} else "medium"
+
+    def _ensure_canonical_units(self) -> None:
+        if self.canonical_units or not self.requires_numeric_evidence():
+            return
+        units = self._infer_canonical_units()
+        if units:
+            self.canonical_units = units
+
+    def _infer_canonical_units(self) -> List[str]:
+        text = self.kpi.lower()
+        if "emission" in text:
+            if "scope" in text or "greenhouse" in text:
+                return ["tonnes CO2e", "tonnes of greenhouse gas"]
+            return ["tonnes"]
+        if "waste" in text:
+            return ["tonnes"]
+        if "energy" in text:
+            return ["kWh", "MWh"]
+        if "water" in text or "wastewater" in text:
+            return ["cubic metres (m3)"]
+        if "packaging" in text or "material" in text:
+            return ["tonnes"]
+        if "headcount" in text or "number of employees" in text:
+            return ["people"]
+        if "turnover" in text and "rate" in text:
+            return ["percent"]
+        if "training" in text and "hours" in text:
+            return ["hours"]
+        if "fatalit" in text or "injur" in text:
+            return ["cases", "rate per 1000 employees"]
+        if "community" in text and ("donation" in text or "resources" in text):
+            return ["HKD", "USD"]
+        return []
+
+    # ---- Helper hooks -----------------------------------------------------
+
+    def requires_numeric_evidence(self) -> bool:
+        return self.quantity.lower() == "absolute values" or self.evidence_type == "quantitative"
+
+    def requires_time_series(self) -> bool:
+        return bool(self.expected_year_span)
+
+    def expected_time_series(self) -> Optional[int]:
+        return self.expected_year_span
+
+    def retrieval_hints(self) -> Dict[str, List[str]]:
+        return {
+            "search_terms": self.search_terms,
+            "regex": self.regex_hints,
+            "synonyms": self.multilingual_synonyms,
+            "canonical_units": self.canonical_units,
+        }
+
+    def to_entity_tuple(self) -> Tuple[str, str, List[str], str]:
         """Return the <Aspect, KPI, Topic, Quantity> tuple."""
         return (self.aspect, self.kpi, self.topic, self.quantity)
 
     def to_json(self) -> Dict:
         """JSON‑serialisable dict representation."""
         return asdict(self)
+
+
+def validate_metadata(metadata: Dict[str, List[ESGMetadataRecord]]) -> List[str]:
+    """Validate metadata schema completeness; returns list of human-readable errors."""
+    errors: List[str] = []
+    seen_ids: Dict[str, str] = {}
+    for pillar, records in metadata.items():
+        for record in records:
+            if not record.topic:
+                errors.append(f"[{record.indicator_id}] missing topic definitions ({pillar}).")
+            if not record.search_terms:
+                errors.append(f"[{record.indicator_id}] missing search_terms ({pillar}).")
+            if record.indicator_id in seen_ids and seen_ids[record.indicator_id] != record.kpi:
+                errors.append(f"Duplicate indicator_id detected: {record.indicator_id}.")
+            seen_ids[record.indicator_id] = record.kpi
+    return errors
 
 
 # ----------------------------------------------------------------------
@@ -1103,8 +1219,17 @@ class ESGMetadataModule:
       - exporting to JSON for inspection or downstream use
     """
 
-    def __init__(self, metadata: Dict[str, List[ESGMetadataRecord]] | None = None):
+    def __init__(
+        self,
+        metadata: Dict[str, List[ESGMetadataRecord]] | None = None,
+        auto_validate: bool = False,
+    ):
         self._metadata: Dict[str, List[ESGMetadataRecord]] = metadata or ESG_METADATA
+        self.schema_version = METADATA_SCHEMA_VERSION
+        self.schema_changelog = METADATA_CHANGELOG
+        self._validation_errors: List[str] = []
+        if auto_validate:
+            self._validation_errors = validate_metadata(self._metadata)
 
     # ---------- basic iteration ----------
 
@@ -1112,6 +1237,22 @@ class ESGMetadataModule:
         for group in self._metadata.values():
             for rec in group:
                 yield rec
+
+    # ---------- schema helpers ----------
+
+    def get_schema_info(self) -> Dict[str, Any]:
+        return {
+            "version": self.schema_version,
+            "changelog": self.schema_changelog,
+            "validation_errors": self._validation_errors,
+        }
+
+    def validate(self, raise_on_error: bool = False) -> List[str]:
+        errors = validate_metadata(self._metadata)
+        self._validation_errors = errors
+        if raise_on_error and errors:
+            raise ValueError("Metadata validation failed", errors)
+        return errors
 
     # ---------- public API ----------
 
@@ -1138,8 +1279,9 @@ class ESGMetadataModule:
         for rec in self._all_records():
             in_topic = any(k in t.lower() for t in rec.topic)
             in_terms = any(k in t.lower() for t in rec.search_terms)
+            in_synonyms = any(k in s.lower() for s in rec.multilingual_synonyms)
             in_kpi = k in rec.kpi.lower()
-            if in_topic or in_terms or in_kpi:
+            if in_topic or in_terms or in_synonyms or in_kpi:
                 matches.append(rec)
         return matches
 
@@ -1184,7 +1326,13 @@ class ESGMetadataModule:
         Returns a formatted prompt string for the LLM.
         """
         topics_str = ", ".join(record.topic)
-        
+        optional_lines = []
+        if record.canonical_units:
+            optional_lines.append(f"Expected Units: {', '.join(record.canonical_units)}")
+        if record.dependency_groups:
+            optional_lines.append(f"Dependencies: {', '.join(record.dependency_groups)}")
+        optional_block = "\n".join(optional_lines)
+
         prompt = f"""You are an ESG data extraction agent. Your task is to extract information from the reference content below.
 
 **ESG Indicator:**
@@ -1192,6 +1340,10 @@ class ESGMetadataModule:
 - KPI: {record.kpi}
 - Topics: {topics_str}
 - Quantity Type: {record.quantity}
+    - Indicator ID: {record.indicator_id}
+    - Evidence Type: {record.evidence_type}
+    - Priority: {record.priority}
+    {optional_block}
 
 **Background Knowledge:**
 {record.knowledge}
