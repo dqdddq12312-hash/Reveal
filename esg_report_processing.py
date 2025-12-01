@@ -2,7 +2,11 @@ from pathlib import Path
 import argparse
 import json
 import re
-from typing import Dict, List, Tuple, Any, Optional
+import hashlib
+import logging
+from datetime import datetime, timezone
+from typing import Dict, List, Tuple, Any, Optional, Iterable
+from collections import Counter, defaultdict
 
 import fitz  # PyMuPDF
 import numpy as np
@@ -16,6 +20,11 @@ from transformers import (
 )
 from sentence_transformers import SentenceTransformer
 
+from esg_metadata import ESGMetadataModule, ESGMetadataRecord
+
+
+logger = logging.getLogger(__name__)
+
 
 class ESGReportPreprocessor:
     """
@@ -25,17 +34,40 @@ class ESGReportPreprocessor:
     - store_faiss_indexes: build FAISS indices for fast retrieval
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        cache_dir: Optional[str] = None,
+        offline_mode: bool = False,
+        metadata_module: Optional[ESGMetadataModule] = None,
+    ) -> None:
+        self.cache_dir = cache_dir
+        self.offline_mode = offline_mode
+        self.metadata_module = metadata_module or ESGMetadataModule()
+        self._metadata_records: List[ESGMetadataRecord] = list(
+            self.metadata_module._all_records()
+        )
+        self._metadata_by_id: Dict[str, ESGMetadataRecord] = {
+            rec.indicator_id: rec
+            for rec in self._metadata_records
+            if rec.indicator_id
+        }
+        self._event_counters: Counter = Counter()
+        self._processing_report: Dict[str, Any] = {}
+        self._reset_processing_state()
         # Table detection & structure recognition (Table-Transformer family)
         self.table_detection_model_name = "microsoft/table-transformer-detection"
         self.table_structure_model_name = "microsoft/table-transformer-structure-recognition"
 
         try:
             self.detection_processor = AutoProcessor.from_pretrained(
-                self.table_detection_model_name
+                self.table_detection_model_name,
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
             )
             self.detection_model = AutoModelForObjectDetection.from_pretrained(
-                self.table_detection_model_name
+                self.table_detection_model_name,
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
             )
         except Exception as e:
             # Allow script to run without remote models (e.g. offline); table detection will be skipped.
@@ -47,10 +79,14 @@ class ESGReportPreprocessor:
 
         try:
             self.structure_processor = AutoProcessor.from_pretrained(
-                self.table_structure_model_name
+                self.table_structure_model_name,
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
             )
             self.structure_model = AutoModelForObjectDetection.from_pretrained(
-                self.table_structure_model_name
+                self.table_structure_model_name,
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
             )
         except Exception as e:
             print(
@@ -61,9 +97,15 @@ class ESGReportPreprocessor:
 
         # Text summarisation (mT5-base)
         try:
-            self.summarizer_tokenizer = AutoTokenizer.from_pretrained("google/mt5-base")
+            self.summarizer_tokenizer = AutoTokenizer.from_pretrained(
+                "google/mt5-base",
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
+            )
             self.summarizer_model = AutoModelForSeq2SeqLM.from_pretrained(
-                "google/mt5-base"
+                "google/mt5-base",
+                cache_dir=self.cache_dir,
+                local_files_only=self.offline_mode,
             )
         except Exception as e:
             print(f"[WARN] Could not load summariser (mt5-base): {e}")
@@ -72,10 +114,277 @@ class ESGReportPreprocessor:
 
         # Text embedding (m3e-base)
         try:
-            self.embedding_model = SentenceTransformer("moka-ai/m3e-base")
+            self.embedding_model = SentenceTransformer(
+                "moka-ai/m3e-base",
+                cache_folder=self.cache_dir,
+            )
         except Exception as e:
             print(f"[WARN] Could not load embedding model (m3e-base): {e}")
             self.embedding_model = None
+
+    # ------------------------------------------------------------------
+    # Internal helpers for provenance + tagging
+    # ------------------------------------------------------------------
+
+    def _reset_processing_state(self) -> None:
+        self._event_counters.clear()
+        self._processing_report = {}
+
+    def _hash_content(self, text: str, page_index: int) -> str:
+        payload = f"{page_index}:{text}".encode("utf-8", errors="ignore")
+        return hashlib.sha1(payload).hexdigest()
+
+    def _compute_kb_digest(
+        self,
+        text_chunks: List[Dict[str, Any]],
+        tables: List[Dict[str, Any]],
+    ) -> str:
+        hasher = hashlib.sha1()
+        for chunk in text_chunks:
+            hasher.update(chunk.get("hash", "").encode("utf-8", errors="ignore"))
+        for table in tables:
+            stats_blob = json.dumps(table.get("stats", {}), sort_keys=True)
+            hasher.update(stats_blob.encode("utf-8", errors="ignore"))
+            hasher.update(
+                (table.get("table_text") or "").encode("utf-8", errors="ignore")
+            )
+        return hasher.hexdigest()
+
+    def _metadata_fallback_summary(self, tags: List[str]) -> Optional[str]:
+        for tag in tags or []:
+            record = self._metadata_by_id.get(tag)
+            if not record:
+                continue
+            knowledge = (record.knowledge or record.kpi or "").strip()
+            if not knowledge:
+                continue
+            snippet = re.sub(r"\s+", " ", knowledge)
+            if len(snippet) > 420:
+                snippet = snippet[:417] + "..."
+            return f"{record.indicator_id}: {snippet}"
+        return None
+
+    @staticmethod
+    def _blocks_to_pseudo_rows(blocks: List[str]) -> List[List[str]]:
+        rows: List[List[str]] = []
+        for block in blocks:
+            # Split on strong whitespace or pipes to approximate table columns
+            parts = [
+                cell.strip()
+                for cell in re.split(r"\s{2,}|\||\t|\n", block)
+                if cell.strip()
+            ]
+            if len(parts) >= 2:
+                rows.append(parts[:8])
+        return rows
+
+    def _build_kb_metadata(
+        self,
+        source_pdf: Optional[str],
+        text_chunks: List[Dict[str, Any]],
+        tables: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        schema_info = self.metadata_module.get_schema_info()
+        pseudo_tables = sum(1 for table in tables if table.get("source") == "pseudo_table")
+        return {
+            "source_pdf": source_pdf,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "schema_version": schema_info.get("version"),
+            "schema_changelog": schema_info.get("changelog"),
+            "metadata_records": len(self._metadata_records),
+            "processing_report": self._processing_report,
+            "content_hash": self._compute_kb_digest(text_chunks, tables),
+            "pseudo_table_count": pseudo_tables,
+        }
+
+    @staticmethod
+    def _clean_bbox(bbox: Optional[Tuple[float, float, float, float]]) -> Optional[Tuple[float, float, float, float]]:
+        if not bbox:
+            return None
+        x0, y0, x1, y1 = bbox
+        return (round(x0, 2), round(y0, 2), round(x1, 2), round(y1, 2))
+
+    def _split_block_text(
+        self,
+        text: str,
+        max_chars: int = 900,
+        overlap: int = 120,
+    ) -> List[str]:
+        """Split long paragraphs into overlapping windows to stabilise embeddings."""
+        text = text.strip()
+        if len(text) <= max_chars:
+            return [text]
+        sentences = re.split(r"(?<=[.!?])\s+", text)
+        chunks: List[str] = []
+        buffer = ""
+        for sentence in sentences:
+            proposal = (buffer + " " + sentence).strip()
+            if len(proposal) <= max_chars:
+                buffer = proposal
+                continue
+            if buffer:
+                chunks.append(buffer.strip())
+                if overlap > 0 and len(buffer) > overlap:
+                    buffer = buffer[-overlap:] + " " + sentence
+                else:
+                    buffer = sentence
+            else:
+                chunks.append(sentence[:max_chars])
+                buffer = sentence[max_chars - overlap :]
+        if buffer:
+            chunks.append(buffer.strip())
+        return [c for c in chunks if c]
+
+    def _tag_text_with_metadata(self, text: str, max_matches: int = 16) -> List[str]:
+        lower_text = text.lower()
+        tags: List[str] = []
+        seen: set[str] = set()
+        for record in self._metadata_records:
+            indicator_id = record.indicator_id
+            if not indicator_id or indicator_id in seen:
+                continue
+            matched = any((term or "").lower() in lower_text for term in record.search_terms if term)
+            if not matched and record.multilingual_synonyms:
+                matched = any((syn or "").lower() in lower_text for syn in record.multilingual_synonyms if syn)
+            if not matched and record.regex_hints:
+                for pattern in record.regex_hints:
+                    try:
+                        if re.search(pattern, text, flags=re.IGNORECASE):
+                            matched = True
+                            break
+                    except re.error:
+                        continue
+            if not matched and record.canonical_units:
+                matched = any(
+                    (unit or "").lower() in lower_text
+                    for unit in record.canonical_units
+                    if unit and len(unit) >= 2
+                )
+            if matched:
+                tags.append(indicator_id)
+                seen.add(indicator_id)
+            if len(tags) >= max_matches:
+                break
+        return tags
+
+    def _build_chunk_payload(
+        self,
+        chunk_text: str,
+        page_index: int,
+        bbox: Optional[Tuple[float, float, float, float]],
+        heading: Optional[str],
+    ) -> Dict[str, Any]:
+        chunk_hash = self._hash_content(chunk_text, page_index)
+        return {
+            "text": chunk_text,
+            "page": page_index,
+            "bbox": self._clean_bbox(bbox),
+            "heading": heading or "Document",
+            "chunk_id": f"p{page_index}-{chunk_hash[:8]}",
+            "hash": chunk_hash,
+            "tags": self._tag_text_with_metadata(chunk_text),
+        }
+
+    def _tag_table_with_metadata(
+        self,
+        indicator_phrase: str,
+        table_text: str,
+        max_matches: int = 5,
+    ) -> List[str]:
+        combined = f"{indicator_phrase}\n{table_text}"
+        return self._tag_text_with_metadata(combined, max_matches=max_matches)
+
+    def _extract_numeric_values(self, table: List[List[str]]) -> List[float]:
+        values: List[float] = []
+        for row in table:
+            for cell in row[1:]:
+                if not isinstance(cell, str):
+                    continue
+                matches = re.findall(r"[+-]?\d+(?:\.\d+)?", cell.replace(",", ""))
+                for match in matches:
+                    try:
+                        values.append(float(match))
+                    except ValueError:
+                        continue
+        return values
+
+    def _analyze_table(self, table: List[List[str]]) -> Dict[str, Any]:
+        if not table:
+            return {
+                "year_columns": [],
+                "numeric_ratio": 0.0,
+                "min": None,
+                "max": None,
+                "suspect": True,
+                "confidence": 0.0,
+            }
+        header = table[0] if table else []
+        year_columns = [idx for idx, cell in enumerate(header) if self._is_year_header(cell)]
+        total_cells = max(sum(len(row) for row in table), 1)
+        numeric_cells = sum(
+            1
+            for row in table
+            for cell in row
+            if isinstance(cell, str) and re.search(r"\d", cell)
+        )
+        numeric_ratio = numeric_cells / total_cells
+        numeric_values = self._extract_numeric_values(table)
+        min_val = min(numeric_values) if numeric_values else None
+        max_val = max(numeric_values) if numeric_values else None
+        suspect = numeric_ratio < 0.15 or (year_columns and len(year_columns) < 2)
+        confidence = min(0.95, max(0.05, numeric_ratio * 1.2))
+        return {
+            "year_columns": year_columns,
+            "numeric_ratio": round(numeric_ratio, 3),
+            "min": min_val,
+            "max": max_val,
+            "suspect": suspect,
+            "confidence": round(confidence, 3),
+        }
+
+    def _build_table_payload(
+        self,
+        rows: List[List[str]],
+        page_index: int,
+        bbox: Optional[Tuple[float, float, float, float]],
+        indicator_phrase: Optional[str] = None,
+        page_level_tags: Optional[Iterable[str]] = None,
+        source_label: str = "detected_table",
+    ) -> Dict[str, Any]:
+        stats = self._analyze_table(rows)
+        if stats.get("suspect"):
+            self._event_counters["tables_suspect"] += 1
+        if source_label == "pseudo_table":
+            stats["pseudo_table"] = True
+            stats["confidence"] = round(min(stats.get("confidence", 0.4), 0.6), 3)
+        table_text = self._table_to_text(rows)
+        tags = set(self._tag_table_with_metadata(indicator_phrase or "", table_text))
+        if page_level_tags:
+            for tag in page_level_tags:
+                if tag:
+                    tags.add(tag)
+        payload = {
+            "rows": rows,
+            "page": page_index,
+            "bbox": self._clean_bbox(bbox),
+            "stats": stats,
+            "tags": sorted(tags),
+            "table_text": table_text,
+            "source": source_label,
+        }
+        return payload
+
+    @staticmethod
+    def _table_to_text(table: List[List[str]]) -> str:
+        lines: List[str] = []
+        for row in table:
+            if not row:
+                continue
+            lines.append(" | ".join(cell.strip() for cell in row))
+        return "\n".join(lines)
+
+    def get_processing_report(self) -> Dict[str, Any]:
+        return self._processing_report
 
     # -------------------------------------------------------------------------
     # Core PDF parsing
@@ -271,15 +580,17 @@ class ESGReportPreprocessor:
 
     def parse_pdf(
         self, pdf_path: str
-    ) -> Tuple[List[str], List[Tuple[int, str]], List[List[List[str]]]]:
+    ) -> Tuple[List[Dict[str, Any]], List[Tuple[int, str]], List[Dict[str, Any]]]:
         """
         Parse the PDF and perform layout extraction.
         Returns:
-            text_blocks: list of paragraph-like text blocks (strings)
+            text_chunks: list of chunk dicts (text, page, bbox, heading, chunk_id, hash, tags)
             outline: list of (level, heading_text) entries
-            tables: list of tables, each table is a list of rows, each row a list of cell texts
+            tables: list of table payloads with rows, provenance, stats and tags
         """
+        self._reset_processing_state()
         doc = fitz.open(pdf_path)
+        self._event_counters["pages_processed"] += doc.page_count
 
         def _count_non_empty_cells(rows: List[List[str]]) -> int:
             return sum(
@@ -375,18 +686,25 @@ class ESGReportPreprocessor:
             base_font_size = 0
 
         # 3) Pass 2: build paragraphs & outline with refined heading heuristics
-        text_blocks: List[str] = []
+        text_chunks: List[Dict[str, Any]] = []
         outline: List[Tuple[int, str]] = []
         seen_headings: set = set()
+        page_headings: Dict[int, str] = {}
+        page_tag_context: Dict[int, Counter] = defaultdict(Counter)
+        pseudo_table_blocks: Dict[int, List[str]] = defaultdict(list)
 
         for info in block_infos:
-            if info["in_table"]:
-                # Table text will be re-extracted when reconstructing tables
-                continue
-
             text = info["text"].strip()
             size = info["max_font_size"]
             is_bold = bool(info["is_bold"])
+            page_index = info.get("page_index", -1)
+            if not text:
+                continue
+
+            if info["in_table"]:
+                # Save for pseudo-table reconstruction if detector fails
+                pseudo_table_blocks[page_index].append(text)
+                continue
 
             # Heading size criterion
             is_heading_candidate = False
@@ -431,14 +749,29 @@ class ESGReportPreprocessor:
                         level = 3
                     outline.append((level, text))
                     seen_headings.add(text)
+                    page_headings[page_index] = text
                 # Do NOT add heading text to text_blocks
                 continue
 
             # Non-heading -> paragraph block
-            text_blocks.append(text)
+            nearest_heading = page_headings.get(page_index)
+            sub_chunks = self._split_block_text(text)
+            for chunk_text in sub_chunks:
+                chunk_payload = self._build_chunk_payload(
+                    chunk_text,
+                    page_index,
+                    info.get("bbox"),
+                    nearest_heading,
+                )
+                text_chunks.append(chunk_payload)
+                if chunk_payload["tags"]:
+                    weight = max(1, min(3, len(chunk_payload["text"]) // 250))
+                    for tag in chunk_payload["tags"]:
+                        page_tag_context[page_index][tag] += weight
+            self._event_counters["text_chunks"] += len(sub_chunks)
 
         # 4) Table reconstruction using structure model (when available)
-        assembled_tables: List[List[List[str]]] = []
+        table_payloads: List[Dict[str, Any]] = []
         if self.structure_model is not None and self.structure_processor is not None:
             for page_index, regions in table_regions_per_page.items():
                 if not regions:
@@ -450,8 +783,14 @@ class ESGReportPreprocessor:
                 )
 
                 page_dict = page.get_text("dict")
+                context_tags = None
+                if page_index in page_tag_context:
+                    context_tags = [
+                        tag for tag, _ in page_tag_context[page_index].most_common(16)
+                    ]
 
                 for region in regions:
+                    self._event_counters["tables_detected"] += 1
                     x0, y0, x1, y1 = region
                     # Slightly expand region to avoid clipping border text
                     margin = 2.0
@@ -508,12 +847,20 @@ class ESGReportPreprocessor:
                         col_boxes.sort(key=lambda b: b[0])
 
                     # Fallback: if structure is empty, treat each text line as a single-cell row
+                    bbox_tuple = (float(rx0), float(ry0), float(rx1), float(ry1))
+
                     if not row_boxes or not col_boxes:
                         clip_rect = fitz.Rect(rx0, ry0, rx1, ry1)
                         fitz_rows = self._extract_table_with_fitz(page, clip_rect)
                         if fitz_rows:
-                            assembled_tables.append(
-                                self._expand_year_columns(fitz_rows)
+                            processed_rows = self._expand_year_columns(fitz_rows)
+                            table_payloads.append(
+                                self._build_table_payload(
+                                    processed_rows,
+                                    page_index,
+                                    bbox_tuple,
+                                    page_level_tags=context_tags,
+                                )
                             )
                             continue
 
@@ -524,8 +871,14 @@ class ESGReportPreprocessor:
                             if ln.strip()
                         ]
                         if rows:
-                            assembled_tables.append(
-                                self._expand_year_columns(rows)
+                            processed_rows = self._expand_year_columns(rows)
+                            table_payloads.append(
+                                self._build_table_payload(
+                                    processed_rows,
+                                    page_index,
+                                    bbox_tuple,
+                                    page_level_tags=context_tags,
+                                )
                             )
                         continue
 
@@ -598,8 +951,14 @@ class ESGReportPreprocessor:
                             fitz_numeric = _count_numeric_cells(fitz_rows)
                             fitz_filled = _count_non_empty_cells(fitz_rows)
                             if fitz_numeric > numeric_cells or fitz_filled > filled_cells:
-                                assembled_tables.append(
-                                    self._expand_year_columns(fitz_rows)
+                                processed_rows = self._expand_year_columns(fitz_rows)
+                                table_payloads.append(
+                                    self._build_table_payload(
+                                        processed_rows,
+                                        page_index,
+                                        bbox_tuple,
+                                        page_level_tags=context_tags,
+                                    )
                                 )
                                 prefer_fitz = True
 
@@ -614,17 +973,65 @@ class ESGReportPreprocessor:
                             if ln.strip()
                         ]
                         if rows:
-                            assembled_tables.append(
-                                self._expand_year_columns(rows)
+                            processed_rows = self._expand_year_columns(rows)
+                            table_payloads.append(
+                                self._build_table_payload(
+                                    processed_rows,
+                                    page_index,
+                                    bbox_tuple,
+                                    page_level_tags=context_tags,
+                                )
                             )
                         continue
 
-                    assembled_tables.append(
-                        self._expand_year_columns(table_cells)
+                    processed_rows = self._expand_year_columns(table_cells)
+                    table_payloads.append(
+                        self._build_table_payload(
+                            processed_rows,
+                            page_index,
+                            bbox_tuple,
+                            page_level_tags=context_tags,
+                        )
                     )
 
+        # Pseudo-table fallback: convert stored table blocks into lightweight tables
+        for page_index, blocks in pseudo_table_blocks.items():
+            has_detected_table = any(tbl.get("page") == page_index for tbl in table_payloads)
+            if has_detected_table:
+                continue
+            pseudo_rows = self._blocks_to_pseudo_rows(blocks)
+            if not pseudo_rows:
+                continue
+            context_tags = None
+            if page_index in page_tag_context:
+                context_tags = [
+                    tag for tag, _ in page_tag_context[page_index].most_common(16)
+                ]
+            table_payloads.append(
+                self._build_table_payload(
+                    pseudo_rows,
+                    page_index,
+                    None,
+                    page_level_tags=context_tags,
+                    source_label="pseudo_table",
+                )
+            )
+            self._event_counters["tables_pseudo"] += 1
+
+        page_count = doc.page_count
         doc.close()
-        return text_blocks, outline, assembled_tables
+        self._processing_report = {
+            "pages": page_count,
+            "text_chunks": len(text_chunks),
+            "tables_extracted": len(table_payloads),
+            "tables_suspect": self._event_counters.get("tables_suspect", 0),
+            "events": dict(self._event_counters),
+            "page_tags": {
+                page: page_tags.most_common(8)
+                for page, page_tags in page_tag_context.items()
+            },
+        }
+        return text_chunks, outline, table_payloads
 
     # -------------------------------------------------------------------------
     # Knowledge base construction
@@ -632,9 +1039,10 @@ class ESGReportPreprocessor:
 
     def build_knowledge_base(
         self,
-        text_blocks: List[str],
+        text_chunks: List[Dict[str, Any]],
         outline: List[Tuple[int, str]],
-        tables: List[List[List[str]]],
+        tables: List[Dict[str, Any]],
+        source_pdf: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Build multi-type knowledge base:
@@ -646,34 +1054,65 @@ class ESGReportPreprocessor:
 
         # 1) Textual content: summarise then embed
         summaries: List[str] = []
+        original_texts: List[str] = []
+        provenance_records: List[Dict[str, Any]] = []
         summarizer_ready = (
             self.summarizer_tokenizer is not None and self.summarizer_model is not None
         )
-        for text in text_blocks:
-            if not text.strip():
+
+        for chunk in text_chunks:
+            chunk_text = chunk.get("text", "")
+            original_texts.append(chunk_text)
+            provenance_records.append(
+                {
+                    "page": chunk.get("page"),
+                    "bbox": chunk.get("bbox"),
+                    "heading": chunk.get("heading"),
+                    "chunk_id": chunk.get("chunk_id"),
+                    "hash": chunk.get("hash"),
+                    "tags": chunk.get("tags", []),
+                }
+            )
+
+            cleaned_text = chunk_text.strip()
+            if not cleaned_text:
                 summaries.append("")
                 continue
+
+            summary_text = ""
             if summarizer_ready:
-                inputs = self.summarizer_tokenizer.encode(
-                    "summarize: " + text,
-                    return_tensors="pt",
-                    max_length=512,
-                    truncation=True,
-                )
-                summary_ids = self.summarizer_model.generate(
-                    inputs,
-                    max_length=100,
-                    num_beams=4,
-                    early_stopping=True,
-                )
-                summary_text = self.summarizer_tokenizer.decode(
-                    summary_ids[0], skip_special_tokens=True
-                )
-            else:
-                # Fallback: trimmed original text
-                summary_text = text.strip()
-                if len(summary_text) > 400:
-                    summary_text = summary_text[:397] + "..."
+                try:
+                    inputs = self.summarizer_tokenizer.encode(
+                        "summarize: " + cleaned_text,
+                        return_tensors="pt",
+                        max_length=512,
+                        truncation=True,
+                    )
+                    summary_ids = self.summarizer_model.generate(
+                        inputs,
+                        max_length=100,
+                        num_beams=4,
+                        early_stopping=True,
+                    )
+                    summary_text = self.summarizer_tokenizer.decode(
+                        summary_ids[0], skip_special_tokens=True
+                    )
+                except Exception as exc:  # pragma: no cover - defensive path
+                    summarizer_ready = False
+                    self._event_counters["summaries_failure"] += 1
+                    logger.warning("Summarizer failed, switching to fallback: %s", exc)
+
+            if not summary_text:
+                metadata_summary = self._metadata_fallback_summary(chunk.get("tags", []))
+                if metadata_summary:
+                    self._event_counters["summaries_metadata_fallback"] += 1
+                    summary_text = metadata_summary
+                else:
+                    self._event_counters["summaries_fallback"] += 1
+                    summary_text = cleaned_text
+                    if len(summary_text) > 400:
+                        summary_text = summary_text[:397] + "..."
+
             summaries.append(summary_text.strip())
 
         if self.embedding_model is not None:
@@ -684,7 +1123,8 @@ class ESGReportPreprocessor:
             text_vectors = np.empty((0, 0), dtype=np.float32)
 
         kb["text"]["summaries"] = summaries
-        kb["text"]["original_texts"] = text_blocks
+        kb["text"]["original_texts"] = original_texts
+        kb["text"]["metadata"] = provenance_records
         kb["text"]["embeddings"] = text_vectors
 
         # 2) Outline: embed headings
@@ -704,7 +1144,10 @@ class ESGReportPreprocessor:
         # 3) Tables: extract key indicator phrases (usually first column of data rows)
         table_phrases: List[str] = []
         table_ids: List[int] = []
-        for t_index, table in enumerate(tables):
+        table_rows: List[List[List[str]]] = []
+        table_metadata: List[Dict[str, Any]] = []
+        for t_index, table_payload in enumerate(tables):
+            table = table_payload.get("rows", [])
             if not table:
                 continue
 
@@ -748,6 +1191,7 @@ class ESGReportPreprocessor:
                 if header_row:
                     start_row = 1
 
+            indicator_found = False
             for row in table[start_row:]:
                 if not row:
                     continue
@@ -770,6 +1214,23 @@ class ESGReportPreprocessor:
                 table_phrases.append(first_cell_text)
                 table_ids.append(t_index)
 
+                indicator_found = True
+
+            if not indicator_found and table:
+                fallback_phrase = str(table[0][0]).strip()
+                if fallback_phrase:
+                    table_phrases.append(fallback_phrase)
+                    table_ids.append(t_index)
+
+            table_rows.append(table)
+            table_metadata.append(
+                {
+                    key: val
+                    for key, val in table_payload.items()
+                    if key != "rows"
+                }
+            )
+
         if self.embedding_model is not None and table_phrases:
             table_vectors = self.embedding_model.encode(
                 table_phrases, show_progress_bar=False
@@ -780,7 +1241,19 @@ class ESGReportPreprocessor:
         kb["tables"]["phrases"] = table_phrases
         kb["tables"]["table_ids"] = table_ids
         kb["tables"]["embeddings"] = table_vectors
-        kb["tables"]["tables"] = tables
+        kb["tables"]["tables"] = table_rows
+        kb["tables"]["metadata"] = table_metadata
+
+        kb["metadata"] = self._build_kb_metadata(
+            source_pdf=str(source_pdf) if source_pdf else None,
+            text_chunks=text_chunks,
+            tables=tables,
+        )
+
+        self._processing_report.setdefault("events", {})
+        self._processing_report["events"].update(dict(self._event_counters))
+        self._processing_report["text_chunks"] = len(text_chunks)
+        self._processing_report["tables_extracted"] = len(table_rows)
 
         return kb
 
@@ -868,6 +1341,7 @@ def _kb_to_json_payload(knowledge_base: Dict[str, Any]) -> Dict[str, Any]:
         "text": {
             "summaries": text_section.get("summaries", []),
             "original_texts": text_section.get("original_texts", []),
+            "metadata": text_section.get("metadata", []),
             "embeddings": _array_to_list(
                 text_section.get("embeddings", np.empty((0, 0)))
             ),
@@ -882,11 +1356,13 @@ def _kb_to_json_payload(knowledge_base: Dict[str, Any]) -> Dict[str, Any]:
         "tables": {
             "phrases": table_section.get("phrases", []),
             "table_ids": table_section.get("table_ids", []),
+            "metadata": table_section.get("metadata", []),
             "embeddings": _array_to_list(
                 table_section.get("embeddings", np.empty((0, 0)))
             ),
             "tables": table_section.get("tables", []),
         },
+        "metadata": knowledge_base.get("metadata", {}),
     }
     return payload
 
@@ -896,6 +1372,7 @@ def _save_processing_outputs(
     knowledge_base: Dict[str, Any],
     indexes: Dict[str, Any],
     output_dir: Path,
+    processing_report: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Path]:
     """
     Save knowledge_base JSON and FAISS indexes to the given directory.
@@ -926,6 +1403,12 @@ def _save_processing_outputs(
         faiss.write_index(indexes["table_index"], str(table_idx_path))
         saved_paths["table_index"] = table_idx_path
 
+    if processing_report:
+        report_path = output_dir / f"{base_name}_processing_report.json"
+        with report_path.open("w", encoding="utf-8") as f:
+            json.dump(processing_report, f, ensure_ascii=False, indent=2)
+        saved_paths["processing_report"] = report_path
+
     return saved_paths
 
 
@@ -946,12 +1429,15 @@ def _process_single_pdf(
     preprocessor: ESGReportPreprocessor, pdf_path: Path, output_dir: Path
 ) -> None:
     """Run the full preprocessing pipeline on a single PDF and save outputs."""
-    text_blocks, outline, tables = preprocessor.parse_pdf(str(pdf_path))
-    kb = preprocessor.build_knowledge_base(text_blocks, outline, tables)
+    text_chunks, outline, tables = preprocessor.parse_pdf(str(pdf_path))
+    kb = preprocessor.build_knowledge_base(
+        text_chunks, outline, tables, source_pdf=str(pdf_path)
+    )
     indexes = preprocessor.store_faiss_indexes(kb)
+    processing_report = preprocessor.get_processing_report()
 
     print(
-        f"Parsed {len(text_blocks)} text blocks, "
+        f"Parsed {len(text_chunks)} text chunks, "
         f"{len(outline)} outline entries, and "
         f"{len(tables)} tables from {pdf_path}."
     )
@@ -963,11 +1449,13 @@ def _process_single_pdf(
     if indexes["table_index"] is not None:
         print(f"  - Table index contains {indexes['table_index'].ntotal} vectors.")
 
-    saved = _save_processing_outputs(pdf_path, kb, indexes, output_dir)
+    saved = _save_processing_outputs(pdf_path, kb, indexes, output_dir, processing_report)
     print(f"  - Saved knowledge base to {saved['knowledge_base']}")
     for key in ("text_index", "outline_index", "table_index"):
         if key in saved:
             print(f"  - Saved {key.replace('_', ' ')} to {saved[key]}")
+    if "processing_report" in saved:
+        print(f"  - Saved processing report to {saved['processing_report']}")
 
 
 def main() -> None:
@@ -990,6 +1478,17 @@ def main() -> None:
             "Defaults to 'processed_reports' next to this script."
         ),
     )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        default=None,
+        help="Optional HuggingFace cache directory to reuse model downloads.",
+    )
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Run in offline mode (local_files_only=True for transformers models).",
+    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).resolve().parent
@@ -1006,7 +1505,12 @@ def main() -> None:
         raise SystemExit(1)
 
     print(f"Found {len(pdf_paths)} PDF(s) to process under {target_path}.")
-    preprocessor = ESGReportPreprocessor()
+    metadata_module = ESGMetadataModule()
+    preprocessor = ESGReportPreprocessor(
+        cache_dir=args.cache_dir,
+        offline_mode=args.offline,
+        metadata_module=metadata_module,
+    )
     for pdf in pdf_paths:
         print(f"\nProcessing {pdf} ...")
         _process_single_pdf(preprocessor, pdf, output_root)
